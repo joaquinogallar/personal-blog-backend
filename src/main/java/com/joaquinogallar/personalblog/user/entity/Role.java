@@ -1,14 +1,13 @@
 package com.joaquinogallar.personalblog.user.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter @Setter
+@Builder
 @Table(name = "roles")
 public class Role {
     @Id
