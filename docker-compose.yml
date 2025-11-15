@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:16
+    container_name: blog_postgres
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+
+volumes:
+  postgres_data:
+
+# docker compose -f mysql.yml up
+# -f specifies the file to use; by default, it is "docker-compose.yml".
+# -d runs the containers in detached mode (in the background).

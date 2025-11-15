@@ -1,1 +1,29 @@
-spring.application.name=personal-blog
+spring:
+  application:
+    name: personal-blog
+
+  # env variables
+  config:
+    import: "optional:file:.env[.properties]"
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:blog}
+    username: ${DB_USER:postgres}
+    password: ${DB_PASSWORD:postgres}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        format_sql: true
+    show-sql: true
+
+server:
+  port: ${SERVER_PORT:8080}
+
+logging:
+  level:
+    root: info
+    org.hibernate.sql: debug
