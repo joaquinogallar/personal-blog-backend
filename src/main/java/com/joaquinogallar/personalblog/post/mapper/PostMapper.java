@@ -2,14 +2,20 @@ package com.joaquinogallar.personalblog.post.mapper;
 
 import com.joaquinogallar.personalblog.post.dto.PostDto;
 import com.joaquinogallar.personalblog.post.entity.Post;
+import com.joaquinogallar.personalblog.tag.mapper.TagMapper;
+import org.springframework.stereotype.Component;
 
-import java.util.UUID;
-
+@Component
 public class PostMapper {
 
-    public static PostDto mapPostToDto(Post post) {
+    private final TagMapper tagMapper;
+
+    public PostMapper(TagMapper tagMapper) {
+        this.tagMapper = tagMapper;
+    }
+
+    public PostDto mapPostToDto(Post post) {
         if(post == null) return null;
-        UUID userId = post.getAuthor().getId();
 
         return new PostDto(
                 post.getId(),
@@ -19,8 +25,8 @@ public class PostMapper {
                 post.getCreatedAt(),
                 post.getUpdatedAt(),
                 post.getPublished(),
-                userId,
-                null,
+                post.getAuthor().getId(),
+                tagMapper.mapToTagDto(post.getTags()),
                 null);
     }
 }
