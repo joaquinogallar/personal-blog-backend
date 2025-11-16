@@ -45,7 +45,7 @@ public class PostService implements IPostService {
         Set<Tag> tags = postDto.tags()
                 .stream()
                 .map(t -> tagRepository.findById(t.id())
-                        .orElseThrow(() -> new RuntimeException("tag not found " + t.id())))
+                        .orElseThrow(() -> new RuntimeException("Tag " + t.id() + " not found")))
                 .collect(Collectors.toSet());
 
         Post post = Post.builder()
@@ -62,7 +62,7 @@ public class PostService implements IPostService {
     // UPDATE
     @Override
     public PostDto updatePost(Long idPost, PostDto postDto) {
-        Post post = postRepository.findById(idPost).orElseThrow(() -> new EntityNotFoundException("Not found: " + idPost));
+        Post post = postRepository.findById(idPost).orElseThrow(() -> new EntityNotFoundException("Post " + idPost + " not found"));
 
         post.setTitle(postDto.title());
         post.setContent(postDto.content());
@@ -75,6 +75,10 @@ public class PostService implements IPostService {
     // DELETE
     @Override
     public PostDto deletePost(Long idPost) {
-        return null;
+        Post post = postRepository.findById(idPost).orElseThrow(() -> new EntityNotFoundException("Post " + idPost + " not found"));
+
+        postRepository.delete(post);
+
+        return postMapper.mapPostToDto(post);
     }
 }
