@@ -1,9 +1,8 @@
 package com.joaquinogallar.personalblog.user.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -12,7 +11,8 @@ import java.util.UUID;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter @Setter
+@Builder
 @Table(name = "users")
 public class UserEntity {
     @Id
@@ -23,6 +23,8 @@ public class UserEntity {
     private String email;
     private String passwordHash;
 
+    @Setter(AccessLevel.NONE)
+    @CreationTimestamp
     private LocalDateTime createAt;
 
     @ManyToMany(fetch = FetchType.EAGER)

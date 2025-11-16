@@ -4,9 +4,9 @@ import com.joaquinogallar.personalblog.comment.entity.Comment;
 import com.joaquinogallar.personalblog.tag.entity.Tag;
 import com.joaquinogallar.personalblog.user.entity.UserEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -15,7 +15,8 @@ import java.util.Set;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
+@Getter @Setter
+@Builder
 @Table(name = "posts")
 public class Post {
     @Id
@@ -30,7 +31,11 @@ public class Post {
     @Column(unique = true)
     private String slug;
 
+    @Setter(AccessLevel.NONE)
+    @CreationTimestamp
     private LocalDateTime createdAt;
+    @Setter(AccessLevel.NONE)
+    @UpdateTimestamp
     private LocalDateTime updatedAt;
 
     private Boolean published;

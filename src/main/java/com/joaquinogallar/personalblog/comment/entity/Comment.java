@@ -3,9 +3,7 @@ package com.joaquinogallar.personalblog.comment.entity;
 import com.joaquinogallar.personalblog.post.entity.Post;
 import com.joaquinogallar.personalblog.user.entity.UserEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
@@ -13,8 +11,9 @@ import java.time.LocalDateTime;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Data
-@Table(name = "commets")
+@Getter @Setter
+@Builder
+@Table(name = "comments")
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +27,7 @@ public class Comment {
     private String content;
 
     @CreationTimestamp
+    @Setter(AccessLevel.NONE)
     private LocalDateTime createdAt;
 
     private Boolean approved;
