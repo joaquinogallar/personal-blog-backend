@@ -62,7 +62,13 @@ public class PostService implements IPostService {
     // UPDATE
     @Override
     public PostDto updatePost(Long idPost, PostDto postDto) {
-        return null;
+        Post post = postRepository.findById(idPost).orElseThrow(() -> new EntityNotFoundException("Not found: " + idPost));
+
+        post.setTitle(postDto.title());
+        post.setContent(postDto.content());
+        post.setSlug(postDto.slug());
+
+        return postMapper.mapPostToDto(postRepository.save(post));
     }
 
     // ------------------------------------------------------------------------------------------------------------------------
