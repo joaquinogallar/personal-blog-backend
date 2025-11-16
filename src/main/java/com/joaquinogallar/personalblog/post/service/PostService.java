@@ -1,6 +1,7 @@
 package com.joaquinogallar.personalblog.post.service;
 
 import com.joaquinogallar.personalblog.post.dto.PostDto;
+import com.joaquinogallar.personalblog.post.mapper.PostMapper;
 import com.joaquinogallar.personalblog.post.repository.PostRepository;
 import org.springframework.stereotype.Service;
 
@@ -9,15 +10,17 @@ import java.util.List;
 @Service
 public class PostService implements IPostService {
 
-    private PostRepository postRepository;
+    private final PostRepository postRepository;
+    private final PostMapper postMapper;
 
-    public PostService(PostRepository postRepository) {
+    public PostService(PostRepository postRepository, PostMapper postMapper) {
         this.postRepository = postRepository;
+        this.postMapper = postMapper;
     }
 
     @Override
     public List<PostDto> getAllPosts() {
-        return List.of();
+        return postMapper.mapPostsToDto(postRepository.findAll());
     }
 
     @Override

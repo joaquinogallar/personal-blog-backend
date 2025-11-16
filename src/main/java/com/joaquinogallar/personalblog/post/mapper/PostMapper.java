@@ -6,6 +6,10 @@ import com.joaquinogallar.personalblog.post.entity.Post;
 import com.joaquinogallar.personalblog.tag.mapper.TagMapper;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class PostMapper {
 
@@ -32,5 +36,10 @@ public class PostMapper {
                 tagMapper.mapToTagDto(post.getTags()),
                 commentMapper.mapToCommentDtoList(post.getComments())
         );
+    }
+
+    public List<PostDto> mapPostsToDto(List<Post> posts) {
+        if(posts == null) return null;
+        return posts.stream().map(this::mapPostToDto).collect(Collectors.toList());
     }
 }
