@@ -40,7 +40,7 @@ public class Post {
 
     private Boolean published;
 
-    @ManyToOne
+    @ManyToOnew
     @JoinColumn(name = "author_id")
     private UserEntity author;
 
