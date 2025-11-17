@@ -4,7 +4,8 @@ import com.joaquinogallar.personalblog.tag.dto.TagDto;
 import com.joaquinogallar.personalblog.tag.entity.Tag;
 import org.springframework.stereotype.Component;
 
-import java.util.Set;
+import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -20,8 +21,8 @@ public class TagMapper {
         );
     }
 
-    public Set<TagDto> mapToTagDto(Set<Tag> tags) {
+    public List<TagDto> mapToTagDto(List<Tag> tags) {
         if(tags == null) return null;
-        return tags.stream().map(this::mapToTagDto).collect(Collectors.toSet());
+        return tags.stream().map(this::mapToTagDto).collect(Collectors.toList());
     }
 }

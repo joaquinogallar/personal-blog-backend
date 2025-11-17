@@ -3,11 +3,14 @@ package com.joaquinogallar.personalblog.post.mapper;
 import com.joaquinogallar.personalblog.comment.mapper.CommentMapper;
 import com.joaquinogallar.personalblog.post.dto.PostDto;
 import com.joaquinogallar.personalblog.post.entity.Post;
+import com.joaquinogallar.personalblog.tag.entity.Tag;
 import com.joaquinogallar.personalblog.tag.mapper.TagMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -33,7 +36,7 @@ public class PostMapper {
                 post.getUpdatedAt(),
                 post.getPublished(),
                 post.getAuthor().getId(),
-                tagMapper.mapToTagDto(post.getTags()),
+                new HashSet<>(tagMapper.mapToTagDto(new ArrayList<>(post.getTags()))),
                 commentMapper.mapToCommentDtoList(post.getComments())
         );
     }
