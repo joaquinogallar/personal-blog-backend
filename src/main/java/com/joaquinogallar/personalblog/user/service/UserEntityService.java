@@ -1,5 +1,6 @@
 package com.joaquinogallar.personalblog.user.service;
 
+import com.joaquinogallar.personalblog.user.dto.ReqUserEntityDto;
 import com.joaquinogallar.personalblog.user.dto.UserEntityDto;
 import com.joaquinogallar.personalblog.user.entity.UserEntity;
 import com.joaquinogallar.personalblog.user.mapper.UserEntityMapper;
@@ -35,12 +36,14 @@ public class UserEntityService implements IUserEntitySerivce {
     // ------------------------------------------------------------------------------------------------------------------------
     // CREATE
     @Override
-    public String createUser(UserEntityDto userEntity) {
+    public String createUser(ReqUserEntityDto userEntity) {
         UserEntity newUser = UserEntity.builder()
                 .username(userEntity.username())
                 .email(userEntity.email())
-                .
+                .passwordHash(userEntity.password()) // this should be hashed when security is implemented
                 .build();
+
+        userEntityRepository.save(newUser);
 
         return "User created successfully";
     }
