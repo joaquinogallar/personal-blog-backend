@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.UUID;
 
-public record UserDto(
+public record UserEntityDto(
         UUID id,
         String username,
         String email,

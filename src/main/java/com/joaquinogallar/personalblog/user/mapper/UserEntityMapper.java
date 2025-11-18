@@ -1,6 +1,6 @@
 package com.joaquinogallar.personalblog.user.mapper;
 
-import com.joaquinogallar.personalblog.user.dto.UserDto;
+import com.joaquinogallar.personalblog.user.dto.UserEntityDto;
 import com.joaquinogallar.personalblog.user.entity.UserEntity;
 import org.springframework.stereotype.Component;
 
@@ -13,10 +13,10 @@ public class UserEntityMapper {
         this.roleMapper = roleMapper;
     }
 
-    public UserDto toDto(UserEntity user) {
+    public UserEntityDto toDto(UserEntity user) {
         if (user == null) return null;
 
-        return new UserDto(
+        return new UserEntityDto(
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
