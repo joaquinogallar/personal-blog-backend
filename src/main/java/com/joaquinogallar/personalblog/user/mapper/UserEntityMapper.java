@@ -4,6 +4,9 @@ import com.joaquinogallar.personalblog.user.dto.UserEntityDto;
 import com.joaquinogallar.personalblog.user.entity.UserEntity;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Component
 public class UserEntityMapper {
 
@@ -13,7 +16,7 @@ public class UserEntityMapper {
         this.roleMapper = roleMapper;
     }
 
-    public UserEntityDto toDto(UserEntity user) {
+    public UserEntityDto mapUsertoDto(UserEntity user) {
         if (user == null) return null;
 
         return new UserEntityDto(
@@ -23,6 +26,11 @@ public class UserEntityMapper {
                 user.getCreateAt(),
                 roleMapper.mapToRoleDtoList(user.getRoles())
         );
+    }
+
+    public List<UserEntityDto> mapUserToDto(List<UserEntity> users) {
+        if(users == null) return null;
+        return users.stream().map(this::mapUsertoDto).collect(Collectors.toList());
     }
 
 }
