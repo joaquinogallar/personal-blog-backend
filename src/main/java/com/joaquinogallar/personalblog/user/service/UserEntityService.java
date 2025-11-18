@@ -1,8 +1,10 @@
 package com.joaquinogallar.personalblog.user.service;
 
 import com.joaquinogallar.personalblog.user.dto.UserEntityDto;
+import com.joaquinogallar.personalblog.user.entity.UserEntity;
 import com.joaquinogallar.personalblog.user.mapper.UserEntityMapper;
 import com.joaquinogallar.personalblog.user.repository.UserEntityRepository;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,18 +24,24 @@ public class UserEntityService implements IUserEntitySerivce {
     // GET
     @Override
     public List<UserEntityDto> getAllUsers() {
-        return List.of();
+        return userEntityMapper.mapUserToDto(userEntityRepository.findAll());
     }
 
     @Override
     public UserEntityDto getUserById(UUID id) {
-        return null;
+        return userEntityMapper.mapUsertoDto(userEntityRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User " + id + " not found")));
     }
 
     // ------------------------------------------------------------------------------------------------------------------------
     // CREATE
     @Override
     public String createUser(UserEntityDto userEntity) {
+        UserEntity newUser = UserEntity.builder()
+                .username(userEntity.username())
+                .email(userEntity.email())
+                .
+                .build();
+
         return "User created successfully";
     }
 
