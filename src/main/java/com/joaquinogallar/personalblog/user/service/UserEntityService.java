@@ -64,6 +64,10 @@ public class UserEntityService implements IUserEntitySerivce {
     // DELETE
     @Override
     public String deleteUser(UUID id) {
+        UserEntity user = userEntityRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User " + id + " not found"));
+
+        userEntityRepository.delete(user);
+
         return "User " + id + " deleted successfully";
     }
 }
