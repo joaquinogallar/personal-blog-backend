@@ -52,6 +52,11 @@ public class UserEntityService implements IUserEntitySerivce {
     // UPDATE
     @Override
     public String updateUser(UUID id, UserEntityDto userEntity) {
+        UserEntity user = userEntityRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User " + id + " not found"));
+
+        user.setUsername(userEntity.username());
+        user.setEmail(userEntity.email());
+
         return "User " + id + " updated successfully";
     }
 
