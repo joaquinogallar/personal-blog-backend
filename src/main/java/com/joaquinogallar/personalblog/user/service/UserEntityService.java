@@ -1,6 +1,7 @@
 package com.joaquinogallar.personalblog.user.service;
 
 import com.joaquinogallar.personalblog.user.dto.UserEntityDto;
+import com.joaquinogallar.personalblog.user.mapper.UserEntityMapper;
 import com.joaquinogallar.personalblog.user.repository.UserEntityRepository;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +12,11 @@ import java.util.UUID;
 public class UserEntityService implements IUserEntitySerivce {
 
     private final UserEntityRepository userEntityRepository;
+    private final UserEntityMapper userEntityMapper;
 
-    public UserEntityService(UserEntityRepository userEntityRepository) {
+    public UserEntityService(UserEntityRepository userEntityRepository, UserEntityMapper userEntityMapper) {
         this.userEntityRepository = userEntityRepository;
+        this.userEntityMapper = userEntityMapper;
     }
 
     // GET
@@ -31,20 +34,20 @@ public class UserEntityService implements IUserEntitySerivce {
     // CREATE
     @Override
     public String createUser(UserEntityDto userEntity) {
-        return "";
+        return "User created successfully";
     }
 
     // ------------------------------------------------------------------------------------------------------------------------
     // UPDATE
     @Override
     public String updateUser(UUID id, UserEntityDto userEntity) {
-        return "";
+        return "User " + id + " updated successfully";
     }
 
     // ------------------------------------------------------------------------------------------------------------------------
     // DELETE
     @Override
     public String deleteUser(UUID id) {
-        return "";
+        return "User " + id + " deleted successfully";
     }
 }
