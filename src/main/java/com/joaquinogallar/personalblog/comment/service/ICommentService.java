@@ -1,8 +1,8 @@
 package com.joaquinogallar.personalblog.comment.service;
 
-import com.joaquinogallar.personalblog.comment.dto.CommentDto;
+import com.joaquinogallar.personalblog.comment.dto.CommentResponse;
 
 public interface ICommentService {
-    String comment(CommentDto comment, Long idPost);
+    String comment(CommentResponse comment, Long idPost);
     String deleteComment(Long commentId);
 }

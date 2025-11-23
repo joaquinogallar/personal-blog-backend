@@ -1,13 +1,13 @@
 package com.joaquinogallar.personalblog.post.service;
 
-import com.joaquinogallar.personalblog.post.dto.PostDto;
+import com.joaquinogallar.personalblog.post.dto.PostResponse;
 
 import java.util.List;
 
 public interface IPostService {
-    List<PostDto> getAllPosts();
-    PostDto getPostByTitle(String title);
-    PostDto createPost(PostDto postDto);
-    PostDto updatePost(Long idPost, PostDto postDto);
-    PostDto deletePost(Long idPost);
+    List<PostResponse> getAllPosts();
+    PostResponse getPostByTitle(String title);
+    PostResponse createPost(PostResponse postResponse);
+    PostResponse updatePost(Long idPost, PostResponse postResponse);
+    PostResponse deletePost(Long idPost);
 }

@@ -1,6 +1,6 @@
 package com.joaquinogallar.personalblog.comment.mapper;
 
-import com.joaquinogallar.personalblog.comment.dto.CommentDto;
+import com.joaquinogallar.personalblog.comment.dto.CommentResponse;
 import com.joaquinogallar.personalblog.comment.entity.Comment;
 import org.springframework.stereotype.Component;
 
@@ -10,10 +10,10 @@ import java.util.stream.Collectors;
 @Component
 public class CommentMapper {
 
-    public CommentDto mapToCommentDto(Comment comment) {
+    public CommentResponse mapToCommentDto(Comment comment) {
         if (comment == null) return null;
 
-        return new CommentDto(
+        return new CommentResponse(
                 comment.getId(),
                 comment.getAuthorName(),
                 comment.getAuthorEmail(),
@@ -24,7 +24,7 @@ public class CommentMapper {
         );
     }
 
-    public List<CommentDto> mapToCommentDtoList(List<Comment> comments) {
+    public List<CommentResponse> mapToCommentDtoList(List<Comment> comments) {
         if (comments == null) return null;
         return comments.stream().map(this::mapToCommentDto).collect(Collectors.toList());
     }

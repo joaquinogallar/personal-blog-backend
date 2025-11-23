@@ -1,6 +1,6 @@
 package com.joaquinogallar.personalblog.comment.service;
 
-import com.joaquinogallar.personalblog.comment.dto.CommentDto;
+import com.joaquinogallar.personalblog.comment.dto.CommentResponse;
 import com.joaquinogallar.personalblog.comment.entity.Comment;
 import com.joaquinogallar.personalblog.comment.mapper.CommentMapper;
 import com.joaquinogallar.personalblog.comment.repository.CommentRepository;
@@ -27,11 +27,11 @@ public class CommentService implements ICommentService {
     }
 
     @Override
-    public String comment(CommentDto commentDto, Long idPost) {
-        User user = userRepository.findById(commentDto.userId()).orElseThrow(() -> new EntityNotFoundException("User " + commentDto.userId() + " not found"));
+    public String comment(CommentResponse commentResponse, Long idPost) {
+        User user = userRepository.findById(commentResponse.userId()).orElseThrow(() -> new EntityNotFoundException("User " + commentResponse.userId() + " not found"));
         Post post = postRepository.findById(idPost).orElseThrow(() -> new EntityNotFoundException("Post " + idPost + " not found"));
         Comment comment = Comment.builder()
-                .content(commentDto.content())
+                .content(commentResponse.content())
                 .user(user)
                 .build();
 

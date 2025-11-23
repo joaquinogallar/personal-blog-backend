@@ -1,16 +1,14 @@
 package com.joaquinogallar.personalblog.post.mapper;
 
 import com.joaquinogallar.personalblog.comment.mapper.CommentMapper;
-import com.joaquinogallar.personalblog.post.dto.PostDto;
+import com.joaquinogallar.personalblog.post.dto.PostResponse;
 import com.joaquinogallar.personalblog.post.entity.Post;
-import com.joaquinogallar.personalblog.tag.entity.Tag;
 import com.joaquinogallar.personalblog.tag.mapper.TagMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -24,10 +22,10 @@ public class PostMapper {
         this.commentMapper = commentMapper;
     }
 
-    public PostDto mapPostToDto(Post post) {
+    public PostResponse mapPostToDto(Post post) {
         if(post == null) return null;
 
-        return new PostDto(
+        return new PostResponse(
                 post.getId(),
                 post.getTitle(),
                 post.getContent(),
@@ -36,12 +34,11 @@ public class PostMapper {
                 post.getUpdatedAt(),
                 post.getPublished(),
                 post.getAuthor().getId(),
-                new HashSet<>(tagMapper.mapToTagDto(new ArrayList<>(post.getTags()))),
-                commentMapper.mapToCommentDtoList(post.getComments())
+                new HashSet<>(tagMapper.mapToTagDto(new ArrayList<>(post.getTags())))
         );
     }
 
-    public List<PostDto> mapPostsToDto(List<Post> posts) {
+    public List<PostResponse> mapPostsToDto(List<Post> posts) {
         if(posts == null) return null;
         return posts.stream().map(this::mapPostToDto).collect(Collectors.toList());
     }

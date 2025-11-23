@@ -1,14 +1,12 @@
 package com.joaquinogallar.personalblog.post.dto;
 
-import com.joaquinogallar.personalblog.comment.dto.CommentDto;
-import com.joaquinogallar.personalblog.tag.dto.TagDto;
+import com.joaquinogallar.personalblog.tag.dto.TagResponse;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 
-public record PostDto(
+public record PostResponse(
         Long id,
         String title,
         String content,
@@ -17,7 +15,6 @@ public record PostDto(
         LocalDateTime updatedAt,
         Boolean published,
         UUID userId,
-        Set<TagDto> tags,
-        List<CommentDto> comments
+        Set<TagResponse> tags
 ) {
 }

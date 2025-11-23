@@ -1,6 +1,6 @@
 package com.joaquinogallar.personalblog.post.service;
 
-import com.joaquinogallar.personalblog.post.dto.PostDto;
+import com.joaquinogallar.personalblog.post.dto.PostResponse;
 import com.joaquinogallar.personalblog.post.entity.Post;
 import com.joaquinogallar.personalblog.post.mapper.PostMapper;
 import com.joaquinogallar.personalblog.post.repository.PostRepository;
@@ -28,30 +28,30 @@ public class PostService implements IPostService {
 
     // GET
     @Override
-    public List<PostDto> getAllPosts() {
+    public List<PostResponse> getAllPosts() {
         return postMapper.mapPostsToDto(postRepository.findAll());
     }
 
     @Override
-    public PostDto getPostByTitle(String title) {
+    public PostResponse getPostByTitle(String title) {
         return postMapper.mapPostToDto(postRepository.findByTitle(title).orElseThrow(() -> new EntityNotFoundException("Not found: " + title)));
     }
 
     // ------------------------------------------------------------------------------------------------------------------------
     // POST
     @Override
-    public PostDto createPost(PostDto postDto) {
+    public PostResponse createPost(PostResponse postResponse) {
 
-        Set<Tag> tags = postDto.tags()
+        Set<Tag> tags = postResponse.tags()
                 .stream()
                 .map(t -> tagRepository.findById(t.id())
                         .orElseThrow(() -> new RuntimeException("Tag " + t.id() + " not found")))
                 .collect(Collectors.toSet());
 
         Post post = Post.builder()
-                .title(postDto.title())
-                .content(postDto.content())
-                .slug(postDto.slug())
+                .title(postResponse.title())
+                .content(postResponse.content())
+                .slug(postResponse.slug())
                 .tags(tags)
                 .build();
 
@@ -61,12 +61,12 @@ public class PostService implements IPostService {
     // ------------------------------------------------------------------------------------------------------------------------
     // UPDATE
     @Override
-    public PostDto updatePost(Long idPost, PostDto postDto) {
+    public PostResponse updatePost(Long idPost, PostResponse postResponse) {
         Post post = postRepository.findById(idPost).orElseThrow(() -> new EntityNotFoundException("Post " + idPost + " not found"));
 
-        post.setTitle(postDto.title());
-        post.setContent(postDto.content());
-        post.setSlug(postDto.slug());
+        post.setTitle(postResponse.title());
+        post.setContent(postResponse.content());
+        post.setSlug(postResponse.slug());
 
         return postMapper.mapPostToDto(postRepository.save(post));
     }
@@ -74,7 +74,7 @@ public class PostService implements IPostService {
     // ------------------------------------------------------------------------------------------------------------------------
     // DELETE
     @Override
-    public PostDto deletePost(Long idPost) {
+    public PostResponse deletePost(Long idPost) {
         Post post = postRepository.findById(idPost).orElseThrow(() -> new EntityNotFoundException("Post " + idPost + " not found"));
 
         postRepository.delete(post);
