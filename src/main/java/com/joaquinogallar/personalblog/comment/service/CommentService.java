@@ -44,6 +44,8 @@ public class CommentService implements ICommentService {
 
     @Override
     public String deleteComment(Long commentId) {
-        return "";
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new EntityNotFoundException("Comment " + commentId + " not found"));
+        commentRepository.delete(comment);
+        return "Comment deleted successfully";
     }
 }
