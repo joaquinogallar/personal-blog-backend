@@ -2,7 +2,7 @@ package com.joaquinogallar.personalblog.post.entity;
 
 import com.joaquinogallar.personalblog.comment.entity.Comment;
 import com.joaquinogallar.personalblog.tag.entity.Tag;
-import com.joaquinogallar.personalblog.user.entity.UserEntity;
+import com.joaquinogallar.personalblog.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -42,7 +42,7 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name = "author_id")
-    private UserEntity author;
+    private User author;
 
     @ManyToMany
     @JoinTable(

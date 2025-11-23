@@ -6,8 +6,8 @@ import com.joaquinogallar.personalblog.comment.mapper.CommentMapper;
 import com.joaquinogallar.personalblog.comment.repository.CommentRepository;
 import com.joaquinogallar.personalblog.post.entity.Post;
 import com.joaquinogallar.personalblog.post.repository.PostRepository;
-import com.joaquinogallar.personalblog.user.entity.UserEntity;
-import com.joaquinogallar.personalblog.user.repository.UserEntityRepository;
+import com.joaquinogallar.personalblog.user.entity.User;
+import com.joaquinogallar.personalblog.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -16,19 +16,19 @@ public class CommentService implements ICommentService {
 
     private final CommentRepository commentRepository;
     private final PostRepository postRepository;
-    private final UserEntityRepository userEntityRepository;
+    private final UserRepository userRepository;
     private final CommentMapper commentMapper;
 
-    public CommentService(CommentRepository commentRepository, PostRepository postRepository, UserEntityRepository userEntityRepository, CommentMapper commentMapper) {
+    public CommentService(CommentRepository commentRepository, PostRepository postRepository, UserRepository userRepository, CommentMapper commentMapper) {
         this.commentRepository = commentRepository;
         this.postRepository = postRepository;
-        this.userEntityRepository = userEntityRepository;
+        this.userRepository = userRepository;
         this.commentMapper = commentMapper;
     }
 
     @Override
     public String comment(CommentDto commentDto, Long idPost) {
-        UserEntity user = userEntityRepository.findById(commentDto.userId()).orElseThrow(() -> new EntityNotFoundException("User " + commentDto.userId() + " not found"));
+        User user = userRepository.findById(commentDto.userId()).orElseThrow(() -> new EntityNotFoundException("User " + commentDto.userId() + " not found"));
         Post post = postRepository.findById(idPost).orElseThrow(() -> new EntityNotFoundException("Post " + idPost + " not found"));
         Comment comment = Comment.builder()
                 .content(commentDto.content())

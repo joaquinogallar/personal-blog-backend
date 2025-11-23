@@ -1,7 +1,7 @@
 package com.joaquinogallar.personalblog.comment.entity;
 
 import com.joaquinogallar.personalblog.post.entity.Post;
-import com.joaquinogallar.personalblog.user.entity.UserEntity;
+import com.joaquinogallar.personalblog.user.entity.User;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -38,6 +38,6 @@ public class Comment {
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = true)
-    private UserEntity user;
+    private User user;
 
 }
