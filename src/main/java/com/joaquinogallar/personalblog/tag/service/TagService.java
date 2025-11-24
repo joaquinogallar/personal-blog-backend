@@ -1,5 +1,6 @@
 package com.joaquinogallar.personalblog.tag.service;
 
+import com.joaquinogallar.personalblog.tag.dto.CreateTagRequest;
 import com.joaquinogallar.personalblog.tag.dto.TagResponse;
 import com.joaquinogallar.personalblog.tag.entity.Tag;
 import com.joaquinogallar.personalblog.tag.mapper.TagMapper;
@@ -39,29 +40,29 @@ public class TagService implements ITagService {
     // ------------------------------------------------------------------------------------------------------------------------
     // POST
     @Override
-    public TagResponse createTag(TagResponse tagResponse) {
+    public TagResponse createTag(CreateTagRequest tagReq) {
         Tag tag = Tag.builder()
-                .name(tagResponse.name())
-                .slug(tagResponse.slug())
+                .name(tagReq.name())
+                .slug(tagReq.slug())
                 .build();
 
         tagRepository.save(tag);
 
-        return tagResponse;
+        return tagMapper.mapToTagDto(tag);
     }
 
     // ------------------------------------------------------------------------------------------------------------------------
     // UPDATE
     @Override
-    public TagResponse updateTag(Long id, TagResponse tagResponse) {
+    public TagResponse updateTag(Long id, CreateTagRequest tagReq) {
         Tag tag =  tagRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Tag " + id + " not found"));
 
-        tag.setName(tagResponse.name());
-        tag.setSlug(tagResponse.slug());
+        tag.setName(tagReq.name());
+        tag.setSlug(tagReq.slug());
 
         tagRepository.save(tag);
 
-        return tagResponse;
+        return tagMapper.mapToTagDto(tag);
     }
 
     // ------------------------------------------------------------------------------------------------------------------------
