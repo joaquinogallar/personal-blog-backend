@@ -12,6 +12,11 @@ public record CreatePostRequest(
 
         @NotBlank(message = "Content is required")
         String content,
+
+        @NotBlank(message = "Slug is required")
+        @Size(max = 100)
+        String slug,
+
         Boolean published,
         Set<Long> tagIds
 ) {}

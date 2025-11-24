@@ -1,5 +1,6 @@
 package com.joaquinogallar.personalblog.post.service;
 
+import com.joaquinogallar.personalblog.post.dto.CreatePostRequest;
 import com.joaquinogallar.personalblog.post.dto.PostResponse;
 import com.joaquinogallar.personalblog.post.entity.Post;
 import com.joaquinogallar.personalblog.post.mapper.PostMapper;
@@ -40,18 +41,18 @@ public class PostService implements IPostService {
     // ------------------------------------------------------------------------------------------------------------------------
     // POST
     @Override
-    public PostResponse createPost(PostResponse postResponse) {
+    public PostResponse createPost(CreatePostRequest postReq) {
 
-        Set<Tag> tags = postResponse.tags()
+        Set<Tag> tags = postReq.tagIds()
                 .stream()
-                .map(t -> tagRepository.findById(t.id())
-                        .orElseThrow(() -> new RuntimeException("Tag " + t.id() + " not found")))
+                .map(t -> tagRepository.findById(t)
+                        .orElse(null))
                 .collect(Collectors.toSet());
 
         Post post = Post.builder()
-                .title(postResponse.title())
-                .content(postResponse.content())
-                .slug(postResponse.slug())
+                .title(postReq.title())
+                .content(postReq.content())
+                .slug(postReq.slug())
                 .tags(tags)
                 .build();
 
@@ -61,12 +62,12 @@ public class PostService implements IPostService {
     // ------------------------------------------------------------------------------------------------------------------------
     // UPDATE
     @Override
-    public PostResponse updatePost(Long idPost, PostResponse postResponse) {
+    public PostResponse updatePost(Long idPost, CreatePostRequest postReq) {
         Post post = postRepository.findById(idPost).orElseThrow(() -> new EntityNotFoundException("Post " + idPost + " not found"));
 
-        post.setTitle(postResponse.title());
-        post.setContent(postResponse.content());
-        post.setSlug(postResponse.slug());
+        post.setTitle(postReq.title());
+        post.setContent(postReq.content());
+        post.setSlug(postReq.slug());
 
         return postMapper.mapPostToDto(postRepository.save(post));
     }
