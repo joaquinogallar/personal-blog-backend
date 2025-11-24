@@ -51,7 +51,7 @@ public class UserService implements IUserSerivce {
     // ------------------------------------------------------------------------------------------------------------------------
     // UPDATE
     @Override
-    public String updateUser(UUID id, UserResponse userEntity) {
+    public String updateUser(UUID id, UserRequest userEntity) {
         User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User " + id + " not found"));
 
         user.setUsername(userEntity.username());

@@ -10,6 +10,6 @@ public interface IUserSerivce {
     List<UserResponse> getAllUsers();
     UserResponse getUserById(UUID id);
     String createUser(UserRequest userEntity);
-    String updateUser(UUID id, UserResponse userEntity);
+    String updateUser(UUID id, UserRequest userEntity);
     String deleteUser(UUID id);
 }
