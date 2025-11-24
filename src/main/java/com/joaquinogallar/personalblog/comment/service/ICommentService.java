@@ -1,8 +1,10 @@
 package com.joaquinogallar.personalblog.comment.service;
 
-import com.joaquinogallar.personalblog.comment.dto.CommentResponse;
+import com.joaquinogallar.personalblog.comment.dto.CreateCommentRequest;
+
+import java.util.UUID;
 
 public interface ICommentService {
-    String comment(CommentResponse comment, Long idPost);
+    String comment(CreateCommentRequest comment, Long idPost, UUID userId);
     String deleteComment(Long commentId);
 }

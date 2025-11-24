@@ -1,6 +1,6 @@
 package com.joaquinogallar.personalblog.comment.service;
 
-import com.joaquinogallar.personalblog.comment.dto.CommentResponse;
+import com.joaquinogallar.personalblog.comment.dto.CreateCommentRequest;
 import com.joaquinogallar.personalblog.comment.entity.Comment;
 import com.joaquinogallar.personalblog.comment.mapper.CommentMapper;
 import com.joaquinogallar.personalblog.comment.repository.CommentRepository;
@@ -10,6 +10,8 @@ import com.joaquinogallar.personalblog.user.entity.User;
 import com.joaquinogallar.personalblog.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.UUID;
 
 @Service
 public class CommentService implements ICommentService {
@@ -27,12 +29,15 @@ public class CommentService implements ICommentService {
     }
 
     @Override
-    public String comment(CommentResponse commentResponse, Long idPost) {
-        User user = userRepository.findById(commentResponse.userId()).orElseThrow(() -> new EntityNotFoundException("User " + commentResponse.userId() + " not found"));
+    public String comment(CreateCommentRequest commentReq, Long idPost, UUID userId) {
+        User user = userRepository.findById(userId).orElse(null);
         Post post = postRepository.findById(idPost).orElseThrow(() -> new EntityNotFoundException("Post " + idPost + " not found"));
+
         Comment comment = Comment.builder()
-                .content(commentResponse.content())
+                .content(commentReq.content())
                 .user(user)
+                .authorEmail(user != null ? user.getEmail() : commentReq.authorEmail())
+                .authorName(user != null ? user.getUsername() : commentReq.authorName())
                 .build();
 
         post.getComments().add(comment);
