@@ -30,6 +30,16 @@ public class UserController {
         return ResponseEntity.ok(userEntityService.getUserById(userId));
     }
 
+    @GetMapping("/{userEmail}")
+    public ResponseEntity<UserResponse> getUserByEmail(@PathVariable String userEmail) {
+        return ResponseEntity.ok(userEntityService.getUserByEmail(userEmail));
+    }
+
+    @GetMapping("/{userUsername}")
+    public ResponseEntity<UserResponse> getUserByUsername(@PathVariable String userUsername) {
+        return ResponseEntity.ok(userEntityService.getUserByUsername(userUsername));
+    }
+
     @PostMapping
     public ResponseEntity<String> createUser(UserRequest user) {
         return ResponseEntity.ok(userEntityService.createUser(user));
