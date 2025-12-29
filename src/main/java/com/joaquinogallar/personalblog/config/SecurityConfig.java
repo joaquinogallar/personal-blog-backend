@@ -5,6 +5,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.LogoutConfigurer;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -22,22 +25,28 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-        .csrf(csrf -> csrf.disable())
-        .authorizeHttpRequests((req) -> req
-            .requestMatchers(HttpMethod.GET,
-                        "/api/v1/posts",
-                        "/api/v1/posts/**",
-                        "/api/v1/comments",
-                        "/api/v1/comments/**",
-                        "/api/v1/tags",
-                        "/api/v1/tags/**").permitAll()
-            .requestMatchers(HttpMethod.POST,
-                "/api/v1/comments"
-            ).permitAll()
-            .anyRequest().authenticated()
-        )
-        .logout((logout) -> logout.permitAll())
-        .build();
+                .csrf(AbstractHttpConfigurer::disable)
+                .authorizeHttpRequests((req) -> req
+                        // public
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/v1/posts/**",
+                                "/api/v1/comments/**",
+                                "/api/v1/tags",
+                                "/api/v1/tags/**").permitAll()
+
+                        // comments without account (anon)
+                        .requestMatchers(HttpMethod.POST,
+                                "/api/v1/comments"
+                        ).permitAll()
+
+                        // admin
+                        .requestMatchers("/api/v1/admin/**")
+                        .hasRole("ADMIN")
+                        .anyRequest().authenticated()
+                )
+                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+                .logout(LogoutConfigurer::permitAll)
+                .build();
     }
 
     @Bean
@@ -46,13 +55,12 @@ public class SecurityConfig {
     }
 
     @Bean
-    public UserDetailsService userDetailsService() {
-        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
         UserDetails user =
         User.builder()
             .username("test")
             .password(encoder.encode("123456"))
-            .roles(Role.ROLE_ADMIN.toString(), Role.ROLE_USER.toString())
+            .roles(Role.ADMIN.toString(), Role.USER.toString())
             .build();
         return new InMemoryUserDetailsManager(user);
     }
