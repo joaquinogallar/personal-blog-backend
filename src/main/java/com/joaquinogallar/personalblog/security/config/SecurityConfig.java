@@ -1,4 +1,4 @@
-package com.joaquinogallar.personalblog.config;
+package com.joaquinogallar.personalblog.security.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
