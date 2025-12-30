@@ -35,12 +35,12 @@ public class UserService implements IUserSerivce {
 
     @Override
     public UserResponse getUserByEmail(String email) {
-        return userMapper.mapUserToDto(userRepository.findUserByEmail(email));
+        return userMapper.mapUserToDto(userRepository.findUserByEmail(email).orElseThrow(() -> new EntityNotFoundException("User " + email + " not found")));
     }
 
     @Override
     public UserResponse getUserByUsername(String username) {
-        return userMapper.mapUserToDto(userRepository.findUserByUsername(username));
+        return userMapper.mapUserToDto(userRepository.findUserByUsername(username).orElseThrow(() -> new EntityNotFoundException("User " + username + " not found")));
     }
 
     // ------------------------------------------------------------------------------------------------------------------------
