@@ -34,5 +34,5 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Set<Role> roles;
 
-    private Boolean isActive;
+    private Boolean isActive = true;
 }
