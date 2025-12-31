@@ -1,6 +1,7 @@
 package com.joaquinogallar.personalblog.security.controller;
 
 import com.joaquinogallar.personalblog.user.dto.LoginRequest;
+import com.joaquinogallar.personalblog.user.dto.UserResponse;
 import com.joaquinogallar.personalblog.user.entity.User;
 import com.joaquinogallar.personalblog.user.mapper.UserMapper;
 import com.joaquinogallar.personalblog.user.repository.UserRepository;
@@ -41,6 +42,14 @@ public class AuthController {
                 .or(() -> userRepository.findUserByEmail(loginRequest.usernameOrEmail()))
                 .orElseThrow(() -> new UsernameNotFoundException("Username or email doesn't exist"));
 
+
+        return ResponseEntity.ok(userMapper.mapUserToDto(user));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<UserResponse> me(Authentication authentication) {
+        User user = userRepository.findUserByUsername(authentication.getName())
+                .orElseThrow(() -> new RuntimeException("Error"));
 
         return ResponseEntity.ok(userMapper.mapUserToDto(user));
     }
