@@ -27,3 +27,9 @@ logging:
   level:
     root: info
     org.hibernate.sql: debug
+
+app:
+  admin:
+    username: ${ADM_USERNAME}
+    email: ${ADM_EMAIL}
+    password: ${ADM_PASSWORD}
