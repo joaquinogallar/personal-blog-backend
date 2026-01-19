@@ -45,14 +45,14 @@ public class SecurityConfig {
                                 "/api/v1/comments"
                         ).permitAll()
 
+                        // auth
+                        .requestMatchers("/api/v1/auth/**")
+                        .permitAll()
+
                         // admin
                         .requestMatchers("/api/v1/admin/**")
                         .hasRole("ADMIN")
                         .anyRequest().authenticated()
-
-                        // auth
-                        .requestMatchers("/api/v1/auth/**")
-                        .permitAll()
                 )
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                 .logout(LogoutConfigurer::permitAll)
