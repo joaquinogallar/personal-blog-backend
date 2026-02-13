@@ -33,28 +33,31 @@ public class SecurityConfig {
                 .sessionManagement(session ->
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
-                .authorizeHttpRequests((req) -> req
-                        // public
-                        .requestMatchers(HttpMethod.GET,
-                                "/api/v1/posts/**",
-                                "/api/v1/comments/**",
-                                "/api/v1/tags",
-                                "/api/v1/tags/**").permitAll()
-
-                        // comments without account (anon)
-                        .requestMatchers(HttpMethod.POST,
-                                "/api/v1/comments"
-                        ).permitAll()
-
-                        // auth
-                        .requestMatchers("/api/v1/auth/**")
-                        .permitAll()
-
-                        // admin
-                        .requestMatchers("/api/v1/admin/**")
-                        .hasRole("ADMIN")
-                        .anyRequest().authenticated()
+                .authorizeHttpRequests(req -> req
+                        .anyRequest().permitAll()
                 )
+//                .authorizeHttpRequests((req) -> req
+//                        // public
+//                        .requestMatchers(HttpMethod.GET,
+//                                "/api/v1/posts/**",
+//                                "/api/v1/comments/**",
+//                                "/api/v1/tags",
+//                                "/api/v1/tags/**").permitAll()
+//
+//                        // comments without account (anon)
+//                        .requestMatchers(HttpMethod.POST,
+//                                "/api/v1/comments"
+//                        ).permitAll()
+//
+//                        // auth
+//                        .requestMatchers("/api/v1/auth/**")
+//                        .permitAll()
+//
+//                        // admin
+//                        .requestMatchers("/api/v1/admin/**")
+//                        .hasRole("ADMIN")
+//                        .anyRequest().authenticated()
+//                )
                 .formLogin(AbstractHttpConfigurer::disable)
                 .logout(AbstractHttpConfigurer::disable)
                 .exceptionHandling(ex -> ex
