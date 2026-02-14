@@ -28,6 +28,16 @@ public class PostService implements IPostService {
         this.postMapper = postMapper;
     }
 
+    public void areTitleAndSlugAvailable(CreatePostRequest postReq) {
+
+        if(postRepository.existsByTitle(postReq.title()))
+            throw new IllegalArgumentException("Error: the title is already in use");
+
+        if(postRepository.existsBySlug(postReq.slug()))
+            throw new IllegalArgumentException("Error: the slug is already in use");
+
+    }
+
     // GET
     @Override
     public List<PostResponse> getAllPosts() {
@@ -44,6 +54,7 @@ public class PostService implements IPostService {
     @Override
     @Transactional
     public PostResponse createPost(CreatePostRequest postReq) {
+        areTitleAndSlugAvailable(postReq);
 
         Set<Tag> tags = postReq.tagIds()
                 .stream()
@@ -68,6 +79,8 @@ public class PostService implements IPostService {
     public PostResponse updatePost(Long idPost, CreatePostRequest postReq) {
         Post post = postRepository.findById(idPost).orElseThrow(() -> new EntityNotFoundException("Post " + idPost + " not found"));
 
+        areTitleAndSlugAvailable(postReq);
+
         post.setTitle(postReq.title());
         post.setContent(postReq.content());
         post.setSlug(postReq.slug());
@@ -86,4 +99,5 @@ public class PostService implements IPostService {
 
         return postMapper.mapPostToDto(post);
     }
+
 }
