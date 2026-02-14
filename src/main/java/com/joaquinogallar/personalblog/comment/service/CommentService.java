@@ -10,6 +10,7 @@ import com.joaquinogallar.personalblog.user.entity.User;
 import com.joaquinogallar.personalblog.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.UUID;
 
@@ -29,6 +30,7 @@ public class CommentService implements ICommentService {
     }
 
     @Override
+    @Transactional
     public String comment(CreateCommentRequest commentReq, Long idPost, UUID userId) {
         User user = userRepository.findById(userId).orElse(null);
         Post post = postRepository.findById(idPost).orElseThrow(() -> new EntityNotFoundException("Post " + idPost + " not found"));
@@ -48,6 +50,7 @@ public class CommentService implements ICommentService {
     }
 
     @Override
+    @Transactional
     public String deleteComment(Long commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new EntityNotFoundException("Comment " + commentId + " not found"));
         commentRepository.delete(comment);

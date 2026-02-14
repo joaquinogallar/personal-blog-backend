@@ -7,6 +7,7 @@ import com.joaquinogallar.personalblog.tag.mapper.TagMapper;
 import com.joaquinogallar.personalblog.tag.repository.TagRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class TagService implements ITagService {
     // ------------------------------------------------------------------------------------------------------------------------
     // POST
     @Override
+    @Transactional
     public TagResponse createTag(CreateTagRequest tagReq) {
         Tag tag = Tag.builder()
                 .name(tagReq.name())
@@ -54,6 +56,7 @@ public class TagService implements ITagService {
     // ------------------------------------------------------------------------------------------------------------------------
     // UPDATE
     @Override
+    @Transactional
     public TagResponse updateTag(Long id, CreateTagRequest tagReq) {
         Tag tag =  tagRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Tag " + id + " not found"));
 
@@ -68,6 +71,7 @@ public class TagService implements ITagService {
     // ------------------------------------------------------------------------------------------------------------------------
     // DELETE
     @Override
+    @Transactional
     public TagResponse deleteTag(Long id) {
         Tag tag = tagRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Tag " + id + " not found"));
 

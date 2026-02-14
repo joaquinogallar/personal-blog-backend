@@ -7,6 +7,7 @@ import com.joaquinogallar.personalblog.user.mapper.UserMapper;
 import com.joaquinogallar.personalblog.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
@@ -46,6 +47,7 @@ public class UserService implements IUserSerivce {
     // ------------------------------------------------------------------------------------------------------------------------
     // CREATE
     @Override
+    @Transactional
     public String createUser(UserRequest userEntity) {
         User newUser = User.builder()
                 .username(userEntity.username())
@@ -61,6 +63,7 @@ public class UserService implements IUserSerivce {
     // ------------------------------------------------------------------------------------------------------------------------
     // UPDATE
     @Override
+    @Transactional
     public String updateUser(UUID id, UserRequest userEntity) {
         User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User " + id + " not found"));
 
@@ -72,6 +75,7 @@ public class UserService implements IUserSerivce {
 
     // ------------------------------------------------------------------------------------------------------------------------
     // DELETE
+    @Transactional
     @Override
     public String deleteUser(UUID id) {
         User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User " + id + " not found"));

@@ -9,6 +9,7 @@ import com.joaquinogallar.personalblog.tag.entity.Tag;
 import com.joaquinogallar.personalblog.tag.repository.TagRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
@@ -41,6 +42,7 @@ public class PostService implements IPostService {
     // ------------------------------------------------------------------------------------------------------------------------
     // POST
     @Override
+    @Transactional
     public PostResponse createPost(CreatePostRequest postReq) {
 
         Set<Tag> tags = postReq.tagIds()
@@ -62,6 +64,7 @@ public class PostService implements IPostService {
     // ------------------------------------------------------------------------------------------------------------------------
     // UPDATE
     @Override
+    @Transactional
     public PostResponse updatePost(Long idPost, CreatePostRequest postReq) {
         Post post = postRepository.findById(idPost).orElseThrow(() -> new EntityNotFoundException("Post " + idPost + " not found"));
 
@@ -75,6 +78,7 @@ public class PostService implements IPostService {
     // ------------------------------------------------------------------------------------------------------------------------
     // DELETE
     @Override
+    @Transactional
     public PostResponse deletePost(Long idPost) {
         Post post = postRepository.findById(idPost).orElseThrow(() -> new EntityNotFoundException("Post " + idPost + " not found"));
 
