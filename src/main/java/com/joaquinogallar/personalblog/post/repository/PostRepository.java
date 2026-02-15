@@ -13,4 +13,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     boolean existsByTitle(String title);
 
     boolean existsBySlug(String slug);
+
+    boolean existsByTitleAndIdNot(String title, Long id);
+
+    boolean existsBySlugAndIdNot(String slug, Long id);
 }

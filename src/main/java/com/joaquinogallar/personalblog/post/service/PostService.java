@@ -38,6 +38,15 @@ public class PostService implements IPostService {
 
     }
 
+    public void checkTitleAndSlugAvailability(CreatePostRequest postReq, Long id) {
+
+        if(postRepository.existsByTitleAndIdNot((postReq.title()), id))
+            throw new IllegalArgumentException("Error: the title is already in use");
+
+        if(postRepository.existsBySlugAndIdNot(postReq.slug(), id))
+            throw new IllegalArgumentException("Error: the slug is already in use");
+    }
+
     // GET
     @Override
     public List<PostResponse> getAllPosts() {
@@ -79,7 +88,7 @@ public class PostService implements IPostService {
     public PostResponse updatePost(Long idPost, CreatePostRequest postReq) {
         Post post = postRepository.findById(idPost).orElseThrow(() -> new EntityNotFoundException("Post " + idPost + " not found"));
 
-        checkTitleAndSlugAvailability(postReq);
+        checkTitleAndSlugAvailability(postReq, idPost);
 
         post.setTitle(postReq.title());
         post.setContent(postReq.content());
