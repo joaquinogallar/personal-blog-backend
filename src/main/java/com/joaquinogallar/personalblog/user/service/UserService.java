@@ -31,6 +31,17 @@ public class UserService implements IUserSerivce {
             throw new IllegalArgumentException("Error: email already in use");
     }
 
+    public void checkUsernameAndEmailAvailability(UserRequest request, UUID userId) {
+
+        if(userRepository.existsByUsernameAndIdNot(request.username(), userId)) {
+            throw new IllegalArgumentException("Error: username already in use");
+        }
+
+        if(userRepository.existsByEmailAndIdNot(request.email(), userId)) {
+            throw new IllegalArgumentException("Error: email already in use");
+        }
+    }
+
     // GET
     @Override
     public List<UserResponse> getAllUsers() {
@@ -77,7 +88,7 @@ public class UserService implements IUserSerivce {
     public String updateUser(UUID id, UserRequest userEntity) {
         User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User " + id + " not found"));
 
-        checkUsernameAndEmailAvailability(userEntity);
+        checkUsernameAndEmailAvailability(userEntity, id);
 
         user.setUsername(userEntity.username());
         user.setEmail(userEntity.email());
