@@ -23,6 +23,14 @@ public class UserService implements IUserSerivce {
         this.userMapper = userMapper;
     }
 
+    public void checkUsernameAndEmailAvailability(UserRequest userEntity) {
+        if(userRepository.existsByUsername(userEntity.username()))
+            throw new IllegalArgumentException("Error: username already in use");
+
+        if(userRepository.existsByEmail(userEntity.email()))
+            throw new IllegalArgumentException("Error: email already in use");
+    }
+
     // GET
     @Override
     public List<UserResponse> getAllUsers() {
@@ -49,6 +57,8 @@ public class UserService implements IUserSerivce {
     @Override
     @Transactional
     public String createUser(UserRequest userEntity) {
+        checkUsernameAndEmailAvailability(userEntity);
+
         User newUser = User.builder()
                 .username(userEntity.username())
                 .email(userEntity.email())
@@ -66,6 +76,8 @@ public class UserService implements IUserSerivce {
     @Transactional
     public String updateUser(UUID id, UserRequest userEntity) {
         User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User " + id + " not found"));
+
+        checkUsernameAndEmailAvailability(userEntity);
 
         user.setUsername(userEntity.username());
         user.setEmail(userEntity.email());

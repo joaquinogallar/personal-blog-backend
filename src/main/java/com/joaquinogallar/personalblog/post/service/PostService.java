@@ -28,7 +28,7 @@ public class PostService implements IPostService {
         this.postMapper = postMapper;
     }
 
-    public void areTitleAndSlugAvailable(CreatePostRequest postReq) {
+    public void checkTitleAndSlugAvailability(CreatePostRequest postReq) {
 
         if(postRepository.existsByTitle(postReq.title()))
             throw new IllegalArgumentException("Error: the title is already in use");
@@ -54,7 +54,7 @@ public class PostService implements IPostService {
     @Override
     @Transactional
     public PostResponse createPost(CreatePostRequest postReq) {
-        areTitleAndSlugAvailable(postReq);
+        checkTitleAndSlugAvailability(postReq);
 
         Set<Tag> tags = postReq.tagIds()
                 .stream()
@@ -79,7 +79,7 @@ public class PostService implements IPostService {
     public PostResponse updatePost(Long idPost, CreatePostRequest postReq) {
         Post post = postRepository.findById(idPost).orElseThrow(() -> new EntityNotFoundException("Post " + idPost + " not found"));
 
-        areTitleAndSlugAvailable(postReq);
+        checkTitleAndSlugAvailability(postReq);
 
         post.setTitle(postReq.title());
         post.setContent(postReq.content());
