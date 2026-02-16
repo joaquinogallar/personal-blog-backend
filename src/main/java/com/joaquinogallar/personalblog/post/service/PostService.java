@@ -1,5 +1,6 @@
 package com.joaquinogallar.personalblog.post.service;
 
+import com.joaquinogallar.personalblog.exception.PostNotFoundException;
 import com.joaquinogallar.personalblog.post.dto.CreatePostRequest;
 import com.joaquinogallar.personalblog.post.dto.PostResponse;
 import com.joaquinogallar.personalblog.post.entity.Post;
@@ -55,7 +56,7 @@ public class PostService implements IPostService {
 
     @Override
     public PostResponse getPostByTitle(String title) {
-        return postMapper.mapPostToDto(postRepository.findByTitle(title).orElseThrow(() -> new EntityNotFoundException("Not found: " + title)));
+        return postMapper.mapPostToDto(postRepository.findByTitle(title).orElseThrow(() -> new PostNotFoundException("Error: post '%s' doesn't exist".formatted(title))));
     }
 
     // ------------------------------------------------------------------------------------------------------------------------
