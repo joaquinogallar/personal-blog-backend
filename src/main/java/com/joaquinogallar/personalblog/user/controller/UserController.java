@@ -26,18 +26,17 @@ public class UserController {
         return ResponseEntity.ok(userEntityService.getAllUsers());
     }
 
-    // Ambiguous
-//    @GetMapping("/{userId}")
-//    public ResponseEntity<UserResponse> getUserById(@PathVariable UUID userId) {
-//        return ResponseEntity.ok(userEntityService.getUserById(userId));
-//    }
-//
-//    @GetMapping("/{userEmail}")
-//    public ResponseEntity<UserResponse> getUserByEmail(@PathVariable String userEmail) {
-//        return ResponseEntity.ok(userEntityService.getUserByEmail(userEmail));
-//    }
+    @GetMapping("/{userId}")
+    public ResponseEntity<UserResponse> getUserById(@PathVariable UUID userId) {
+        return ResponseEntity.ok(userEntityService.getUserById(userId));
+    }
 
-    @GetMapping("/{userUsername}")
+    @GetMapping("/email/{userEmail}")
+    public ResponseEntity<UserResponse> getUserByEmail(@PathVariable String userEmail) {
+        return ResponseEntity.ok(userEntityService.getUserByEmail(userEmail));
+    }
+
+    @GetMapping("/username/{userUsername}")
     public ResponseEntity<UserResponse> getUserByUsername(@PathVariable String userUsername) {
         return ResponseEntity.ok(userEntityService.getUserByUsername(userUsername));
     }
