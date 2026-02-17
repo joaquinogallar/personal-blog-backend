@@ -8,6 +8,7 @@ import com.joaquinogallar.personalblog.post.mapper.PostMapper;
 import com.joaquinogallar.personalblog.post.repository.PostRepository;
 import com.joaquinogallar.personalblog.tag.entity.Tag;
 import com.joaquinogallar.personalblog.tag.repository.TagRepository;
+import com.joaquinogallar.personalblog.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,11 +23,13 @@ public class PostService implements IPostService {
     private final PostRepository postRepository;
     private final TagRepository tagRepository;
     private final PostMapper postMapper;
+    private final UserRepository userRepository;
 
-    public PostService(PostRepository postRepository, TagRepository tagRepository, PostMapper postMapper) {
+    public PostService(PostRepository postRepository, TagRepository tagRepository, PostMapper postMapper, UserRepository userRepository) {
         this.postRepository = postRepository;
         this.tagRepository = tagRepository;
         this.postMapper = postMapper;
+        this.userRepository = userRepository;
     }
 
     public void checkTitleAndSlugAvailability(CreatePostRequest postReq) {
@@ -36,7 +39,6 @@ public class PostService implements IPostService {
 
         if(postRepository.existsBySlug(postReq.slug()))
             throw new IllegalArgumentException("Error: the slug is already in use");
-
     }
 
     public void checkTitleAndSlugAvailability(CreatePostRequest postReq, Long id) {
@@ -63,7 +65,7 @@ public class PostService implements IPostService {
     // POST
     @Override
     @Transactional
-    public PostResponse createPost(CreatePostRequest postReq) {
+    public PostResponse createPost(CreatePostRequest postReq, String username) {
         checkTitleAndSlugAvailability(postReq);
 
         Set<Tag> tags = postReq.tagIds()
@@ -77,6 +79,7 @@ public class PostService implements IPostService {
                 .content(postReq.content())
                 .slug(postReq.slug())
                 .tags(tags)
+                .author(userRepository.findUserByUsername(username).orElseThrow(() -> new EntityNotFoundException("User not found")))
                 .build();
 
         return postMapper.mapPostToDto(postRepository.save(post));

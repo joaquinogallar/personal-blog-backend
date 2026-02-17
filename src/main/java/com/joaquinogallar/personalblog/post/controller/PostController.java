@@ -30,7 +30,7 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<PostResponse> createPost(@RequestBody CreatePostRequest postReq) {
-        return ResponseEntity.ok(postService.createPost(postReq));
+        return ResponseEntity.ok(postService.createPost(postReq, "testUser"));
     }
 
     @PostMapping("/{idPost}")

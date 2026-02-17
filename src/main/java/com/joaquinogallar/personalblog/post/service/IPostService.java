@@ -8,7 +8,7 @@ import java.util.List;
 public interface IPostService {
     List<PostResponse> getAllPosts();
     PostResponse getPostByTitle(String title);
-    PostResponse createPost(CreatePostRequest postResponse);
+    PostResponse createPost(CreatePostRequest postResponse, String username);
     PostResponse updatePost(Long idPost, CreatePostRequest postResponse);
     PostResponse deletePost(Long idPost);
 }

@@ -6,7 +6,7 @@ import com.joaquinogallar.personalblog.user.dto.UserResponse;
 import java.util.List;
 import java.util.UUID;
 
-public interface IUserSerivce {
+public interface IUserService {
     List<UserResponse> getAllUsers();
     UserResponse getUserById(UUID id);
     UserResponse getUserByEmail(String email);
