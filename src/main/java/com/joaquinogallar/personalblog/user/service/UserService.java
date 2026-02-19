@@ -90,7 +90,7 @@ public class UserService implements IUserService {
     @Override
     @Transactional
     public String updateUser(UUID id, UserRequest userEntity) {
-        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User " + id + " not found"));
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User " + id + " not found"));
 
         checkUsernameAndEmailAvailability(userEntity, id);
 
@@ -105,7 +105,7 @@ public class UserService implements IUserService {
     @Transactional
     @Override
     public String deleteUser(UUID id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User " + id + " not found"));
+        User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User " + id + " not found"));
 
         userRepository.delete(user);
 
