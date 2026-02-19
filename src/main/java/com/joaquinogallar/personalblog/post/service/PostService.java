@@ -10,7 +10,9 @@ import com.joaquinogallar.personalblog.post.repository.PostRepository;
 import com.joaquinogallar.personalblog.tag.entity.Tag;
 import com.joaquinogallar.personalblog.tag.repository.TagRepository;
 import com.joaquinogallar.personalblog.user.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -53,8 +55,8 @@ public class PostService implements IPostService {
 
     // GET
     @Override
-    public List<PostResponse> getAllPosts() {
-        return postMapper.mapPostsToDto(postRepository.findAll());
+    public Page<PostResponse> getAllPosts(Pageable pageable) {
+        return postMapper.mapPostsToDto(postRepository.findAll(pageable));
     }
 
     @Override

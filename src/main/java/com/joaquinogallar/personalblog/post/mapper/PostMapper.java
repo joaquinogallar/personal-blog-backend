@@ -4,6 +4,7 @@ import com.joaquinogallar.personalblog.comment.mapper.CommentMapper;
 import com.joaquinogallar.personalblog.post.dto.PostResponse;
 import com.joaquinogallar.personalblog.post.entity.Post;
 import com.joaquinogallar.personalblog.tag.mapper.TagMapper;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -41,5 +42,10 @@ public class PostMapper {
     public List<PostResponse> mapPostsToDto(List<Post> posts) {
         if(posts == null) return null;
         return posts.stream().map(this::mapPostToDto).collect(Collectors.toList());
+    }
+
+    public Page<PostResponse> mapPostsToDto(Page<Post> posts) {
+        if(posts == null) return null;
+        return posts.map(this::mapPostToDto);
     }
 }
