@@ -4,6 +4,9 @@ import com.joaquinogallar.personalblog.comment.dto.CreateCommentRequest;
 import com.joaquinogallar.personalblog.comment.entity.Comment;
 import com.joaquinogallar.personalblog.comment.mapper.CommentMapper;
 import com.joaquinogallar.personalblog.comment.repository.CommentRepository;
+import com.joaquinogallar.personalblog.exception.CommentNotFoundException;
+import com.joaquinogallar.personalblog.exception.PostNotFoundException;
+import com.joaquinogallar.personalblog.exception.UserNotFoundException;
 import com.joaquinogallar.personalblog.post.entity.Post;
 import com.joaquinogallar.personalblog.post.repository.PostRepository;
 import com.joaquinogallar.personalblog.user.entity.User;
@@ -31,9 +34,9 @@ public class CommentService implements ICommentService {
 
     @Override
     @Transactional
-    public String comment(CreateCommentRequest commentReq, Long idPost, UUID userId) {
-        User user = userRepository.findById(userId).orElse(null);
-        Post post = postRepository.findById(idPost).orElseThrow(() -> new EntityNotFoundException("Post " + idPost + " not found"));
+    public String comment(CreateCommentRequest commentReq, Long postId, UUID userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User " + userId + " not found"));
+        Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException("Post " + postId + " not found"));
 
         Comment comment = Comment.builder()
                 .content(commentReq.content())
@@ -52,7 +55,7 @@ public class CommentService implements ICommentService {
     @Override
     @Transactional
     public String deleteComment(Long commentId) {
-        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new EntityNotFoundException("Comment " + commentId + " not found"));
+        Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CommentNotFoundException("Comment " + commentId + " not found"));
         commentRepository.delete(comment);
         return "Comment deleted successfully";
     }
