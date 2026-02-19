@@ -1,5 +1,6 @@
 package com.joaquinogallar.personalblog.user.service;
 
+import com.joaquinogallar.personalblog.exception.UserNotFoundException;
 import com.joaquinogallar.personalblog.user.dto.UserRequest;
 import com.joaquinogallar.personalblog.user.dto.UserResponse;
 import com.joaquinogallar.personalblog.user.entity.User;
@@ -53,17 +54,17 @@ public class UserService implements IUserService {
 
     @Override
     public UserResponse getUserById(UUID id) {
-        return userMapper.mapUserToDto(userRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("User " + id + " not found")));
+        return userMapper.mapUserToDto(userRepository.findById(id).orElseThrow(() -> new UserNotFoundException("User " + id + " not found")));
     }
 
     @Override
     public UserResponse getUserByEmail(String email) {
-        return userMapper.mapUserToDto(userRepository.findUserByEmail(email).orElseThrow(() -> new EntityNotFoundException("User " + email + " not found")));
+        return userMapper.mapUserToDto(userRepository.findUserByEmail(email).orElseThrow(() -> new UserNotFoundException("User " + email + " not found")));
     }
 
     @Override
     public UserResponse getUserByUsername(String username) {
-        return userMapper.mapUserToDto(userRepository.findUserByUsername(username).orElseThrow(() -> new EntityNotFoundException("User " + username + " not found")));
+        return userMapper.mapUserToDto(userRepository.findUserByUsername(username).orElseThrow(() -> new UserNotFoundException("User " + username + " not found")));
     }
 
     // ------------------------------------------------------------------------------------------------------------------------
