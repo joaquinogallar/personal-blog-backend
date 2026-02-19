@@ -1,6 +1,7 @@
 package com.joaquinogallar.personalblog.post.service;
 
 import com.joaquinogallar.personalblog.exception.PostNotFoundException;
+import com.joaquinogallar.personalblog.exception.UserNotFoundException;
 import com.joaquinogallar.personalblog.post.dto.CreatePostRequest;
 import com.joaquinogallar.personalblog.post.dto.PostResponse;
 import com.joaquinogallar.personalblog.post.entity.Post;
@@ -79,7 +80,7 @@ public class PostService implements IPostService {
                 .content(postReq.content())
                 .slug(postReq.slug())
                 .tags(tags)
-                .author(userRepository.findUserByUsername(username).orElseThrow(() -> new EntityNotFoundException("User not found")))
+                .author(userRepository.findUserByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found")))
                 .build();
 
         return postMapper.mapPostToDto(postRepository.save(post));
@@ -90,7 +91,7 @@ public class PostService implements IPostService {
     @Override
     @Transactional
     public PostResponse updatePost(Long idPost, CreatePostRequest postReq) {
-        Post post = postRepository.findById(idPost).orElseThrow(() -> new EntityNotFoundException("Post " + idPost + " not found"));
+        Post post = postRepository.findById(idPost).orElseThrow(() -> new PostNotFoundException("Post " + idPost + " not found"));
 
         checkTitleAndSlugAvailability(postReq, idPost);
 
@@ -106,7 +107,7 @@ public class PostService implements IPostService {
     @Override
     @Transactional
     public PostResponse deletePost(Long idPost) {
-        Post post = postRepository.findById(idPost).orElseThrow(() -> new EntityNotFoundException("Post " + idPost + " not found"));
+        Post post = postRepository.findById(idPost).orElseThrow(() -> new PostNotFoundException("Post " + idPost + " not found"));
 
         postRepository.delete(post);
 
