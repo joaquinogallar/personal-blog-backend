@@ -35,7 +35,7 @@ public class PostMapper {
                 post.getUpdatedAt(),
                 post.getPublished(),
                 post.getAuthor().getId(),
-                new HashSet<>(tagMapper.mapToTagDto(new ArrayList<>(post.getTags())))
+                new HashSet<>(tagMapper.mapToTagsDto(new ArrayList<>(post.getTags())))
         );
     }
 
