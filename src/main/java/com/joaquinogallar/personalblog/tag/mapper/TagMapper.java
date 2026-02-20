@@ -2,6 +2,7 @@ package com.joaquinogallar.personalblog.tag.mapper;
 
 import com.joaquinogallar.personalblog.tag.dto.TagResponse;
 import com.joaquinogallar.personalblog.tag.entity.Tag;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -20,8 +21,13 @@ public class TagMapper {
         );
     }
 
-    public List<TagResponse> mapToTagDto(List<Tag> tags) {
+    public List<TagResponse> mapToTagsDto(List<Tag> tags) {
         if(tags == null) return null;
         return tags.stream().map(this::mapToTagDto).collect(Collectors.toList());
+    }
+
+    public Page<TagResponse> mapToTagsDto(Page<Tag> tags) {
+        if(tags == null) return null;
+        return tags.map(this::mapToTagDto);
     }
 }

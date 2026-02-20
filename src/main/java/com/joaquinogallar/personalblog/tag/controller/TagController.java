@@ -3,6 +3,9 @@ package com.joaquinogallar.personalblog.tag.controller;
 import com.joaquinogallar.personalblog.tag.dto.CreateTagRequest;
 import com.joaquinogallar.personalblog.tag.dto.TagResponse;
 import com.joaquinogallar.personalblog.tag.service.ITagService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,8 +22,8 @@ public class TagController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TagResponse>> getAllTags() {
-        return ResponseEntity.ok(tagService.getAllTags());
+    public ResponseEntity<Page<TagResponse>> getAllTags(@PageableDefault Pageable pageable) {
+        return ResponseEntity.ok(tagService.getAllTags(pageable));
     }
 
     @GetMapping("/{tagName}")
