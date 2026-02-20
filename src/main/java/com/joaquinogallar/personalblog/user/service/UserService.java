@@ -9,6 +9,8 @@ import com.joaquinogallar.personalblog.user.repository.UserRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -48,8 +50,8 @@ public class UserService implements IUserService {
 
     // GET
     @Override
-    public List<UserResponse> getAllUsers() {
-        return userMapper.mapUserToDto(userRepository.findAll());
+    public Page<UserResponse> getAllUsers(Pageable pageable) {
+        return userMapper.mapUserToDto(userRepository.findAll(pageable));
     }
 
     @Override

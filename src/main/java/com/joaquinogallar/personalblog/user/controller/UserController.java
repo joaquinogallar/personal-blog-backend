@@ -5,6 +5,9 @@ import com.joaquinogallar.personalblog.user.dto.UserResponse;
 import com.joaquinogallar.personalblog.user.service.IUserService;
 import com.joaquinogallar.personalblog.user.service.UserService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +25,8 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<List<UserResponse>> getAllUsers() {
-        return ResponseEntity.ok(userEntityService.getAllUsers());
+    public ResponseEntity<Page<UserResponse>> getAllUsers(@PageableDefault(size = 10) Pageable pageable) {
+        return ResponseEntity.ok(userEntityService.getAllUsers(pageable));
     }
 
     @GetMapping("/{userId}")

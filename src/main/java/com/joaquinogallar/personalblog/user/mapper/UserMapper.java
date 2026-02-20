@@ -2,6 +2,7 @@ package com.joaquinogallar.personalblog.user.mapper;
 
 import com.joaquinogallar.personalblog.user.dto.UserResponse;
 import com.joaquinogallar.personalblog.user.entity.User;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -27,4 +28,8 @@ public class UserMapper {
         return users.stream().map(this::mapUserToDto).collect(Collectors.toList());
     }
 
+    public Page<UserResponse> mapUserToDto(Page<User> users) {
+        if(users == null) return null;
+        return users.map(this::mapUserToDto);
+    }
 }
