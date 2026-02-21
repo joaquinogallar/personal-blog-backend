@@ -8,6 +8,7 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,16 +47,22 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<String> createUser(@Valid @RequestBody UserRequest user) {
-        return ResponseEntity.ok(userEntityService.createUser(user));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(userEntityService.createUser(user));
     }
 
     @PostMapping("/{userId}")
     public ResponseEntity<String> updateUser(@PathVariable UUID userId, @RequestBody UserRequest user) {
-        return ResponseEntity.ok(userEntityService.updateUser(userId, user));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(userEntityService.updateUser(userId, user));
     }
 
     @DeleteMapping("/{userId}")
      public ResponseEntity<String> deleteUser(@PathVariable UUID userId) {
-        return ResponseEntity.ok(userEntityService.deleteUser(userId));
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(userEntityService.deleteUser(userId));
      }
 }
