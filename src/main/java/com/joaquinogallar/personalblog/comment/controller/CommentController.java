@@ -21,7 +21,9 @@ public class CommentController {
     public ResponseEntity<String> comment(@PathVariable Long postId,
                                           @PathVariable UUID userId,
                                           @RequestBody CreateCommentRequest commentReq) {
-        return ResponseEntity.ok(commentService.comment(commentReq, postId, userId));
+        return ResponseEntity
+                .status(201)
+                .body(commentService.comment(commentReq, postId, userId));
     }
 
     @DeleteMapping
