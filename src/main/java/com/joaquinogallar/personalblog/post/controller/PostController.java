@@ -33,14 +33,14 @@ public class PostController {
     @PostMapping
     public ResponseEntity<PostResponse> createPost(@RequestBody CreatePostRequest postReq) {
         return ResponseEntity
-                .status(HttpStatus.ACCEPTED)
+                .status(HttpStatus.CREATED)
                 .body(postService.createPost(postReq, "testUser")); // hadrcoded username for testing
     }
 
     @PostMapping("/{idPost}")
     public ResponseEntity<PostResponse> updatePost(@PathVariable Long idPost, @RequestBody CreatePostRequest postReq) {
         return ResponseEntity
-                .status(HttpStatus.ACCEPTED)
+                .status(HttpStatus.CREATED)
                 .body(postService.updatePost(idPost, postReq));
     }
 
