@@ -6,6 +6,7 @@ import com.joaquinogallar.personalblog.tag.service.ITagService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,17 +39,23 @@ public class TagController {
 
     @PostMapping
     public ResponseEntity<TagResponse> createTag(@RequestBody CreateTagRequest tagReq) {
-        return ResponseEntity.ok(tagService.createTag(tagReq));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(tagService.createTag(tagReq));
     }
 
     @PostMapping("/{tagId}")
     public ResponseEntity<TagResponse> updateTag(@PathVariable Long tagId, @RequestBody CreateTagRequest tagReq) {
-        return ResponseEntity.ok(tagService.updateTag(tagId, tagReq));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(tagService.updateTag(tagId, tagReq));
     }
 
     @DeleteMapping("/{tagId}")
     public ResponseEntity<TagResponse> deleteTag(@PathVariable Long tagId) {
-        return ResponseEntity.ok(tagService.deleteTag(tagId));
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(tagService.deleteTag(tagId));
     }
 
 }
