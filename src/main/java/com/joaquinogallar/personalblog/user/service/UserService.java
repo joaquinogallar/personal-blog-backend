@@ -1,12 +1,11 @@
 package com.joaquinogallar.personalblog.user.service;
 
-import com.joaquinogallar.personalblog.exception.UserNotFoundException;
+import com.joaquinogallar.personalblog.user.exception.UserNotFoundException;
 import com.joaquinogallar.personalblog.user.dto.UserRequest;
 import com.joaquinogallar.personalblog.user.dto.UserResponse;
 import com.joaquinogallar.personalblog.user.entity.User;
 import com.joaquinogallar.personalblog.user.mapper.UserMapper;
 import com.joaquinogallar.personalblog.user.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -14,7 +13,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.UUID;
 
 @Service

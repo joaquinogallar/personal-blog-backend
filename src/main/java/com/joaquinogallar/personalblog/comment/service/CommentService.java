@@ -4,14 +4,13 @@ import com.joaquinogallar.personalblog.comment.dto.CreateCommentRequest;
 import com.joaquinogallar.personalblog.comment.entity.Comment;
 import com.joaquinogallar.personalblog.comment.mapper.CommentMapper;
 import com.joaquinogallar.personalblog.comment.repository.CommentRepository;
-import com.joaquinogallar.personalblog.exception.CommentNotFoundException;
-import com.joaquinogallar.personalblog.exception.PostNotFoundException;
-import com.joaquinogallar.personalblog.exception.UserNotFoundException;
+import com.joaquinogallar.personalblog.comment.exception.CommentNotFoundException;
+import com.joaquinogallar.personalblog.post.exception.PostNotFoundException;
+import com.joaquinogallar.personalblog.user.exception.UserNotFoundException;
 import com.joaquinogallar.personalblog.post.entity.Post;
 import com.joaquinogallar.personalblog.post.repository.PostRepository;
 import com.joaquinogallar.personalblog.user.entity.User;
 import com.joaquinogallar.personalblog.user.repository.UserRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

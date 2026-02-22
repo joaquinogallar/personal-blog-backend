@@ -1,7 +1,7 @@
 package com.joaquinogallar.personalblog.post.service;
 
-import com.joaquinogallar.personalblog.exception.PostNotFoundException;
-import com.joaquinogallar.personalblog.exception.UserNotFoundException;
+import com.joaquinogallar.personalblog.post.exception.PostNotFoundException;
+import com.joaquinogallar.personalblog.user.exception.UserNotFoundException;
 import com.joaquinogallar.personalblog.post.dto.CreatePostRequest;
 import com.joaquinogallar.personalblog.post.dto.PostResponse;
 import com.joaquinogallar.personalblog.post.entity.Post;
@@ -12,11 +12,9 @@ import com.joaquinogallar.personalblog.tag.repository.TagRepository;
 import com.joaquinogallar.personalblog.user.repository.UserRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
