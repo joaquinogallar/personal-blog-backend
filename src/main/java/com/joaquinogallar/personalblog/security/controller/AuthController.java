@@ -1,5 +1,6 @@
 package com.joaquinogallar.personalblog.security.controller;
 
+import com.joaquinogallar.personalblog.security.service.JwtService;
 import com.joaquinogallar.personalblog.user.dto.LoginRequest;
 import com.joaquinogallar.personalblog.user.dto.UserRequest;
 import com.joaquinogallar.personalblog.user.dto.UserResponse;
@@ -13,10 +14,12 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
 import java.util.Set;
 
 @RestController
@@ -26,12 +29,14 @@ public class AuthController {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
+    private final JwtService jwtService;
 
-    public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder) {
+    public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, JwtService jwtService) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
     @PostMapping()
@@ -39,19 +44,18 @@ public class AuthController {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                    loginRequest.usernameOrEmail(),
-                    loginRequest.password()
+                        loginRequest.usernameOrEmail(),
+                        loginRequest.password()
                 )
         );
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        User user = userRepository.findUserByUsername(loginRequest.usernameOrEmail())
-                .or(() -> userRepository.findUserByEmail(loginRequest.usernameOrEmail()))
-                .orElseThrow(() -> new UsernameNotFoundException("Username or email doesn't exist"));
+        String token = jwtService.generateToken(userDetails);
 
-
-        return ResponseEntity.ok(userMapper.mapUserToDto(user));
+        return ResponseEntity.ok(Map.of(
+                "token", token
+        ));
     }
 
     @PostMapping("/register")
