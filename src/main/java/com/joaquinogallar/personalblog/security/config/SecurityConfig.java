@@ -75,15 +75,4 @@ public class SecurityConfig {
     public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
-
-    @Bean
-    public UserDetailsService userDetailsService(PasswordEncoder encoder) {
-        UserDetails user =
-        User.builder()
-            .username("test")
-            .password(encoder.encode("123456"))
-            .roles(Role.ADMIN.toString(), Role.USER.toString())
-            .build();
-        return new InMemoryUserDetailsManager(user);
-    }
 }
