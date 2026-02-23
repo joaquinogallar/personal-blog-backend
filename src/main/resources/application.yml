@@ -33,3 +33,5 @@ app:
     username: ${ADM_USERNAME}
     email: ${ADM_EMAIL}
     password: ${ADM_PASSWORD}
+  jwt:
+    secret: ${JWT_SECRET_KEY}
