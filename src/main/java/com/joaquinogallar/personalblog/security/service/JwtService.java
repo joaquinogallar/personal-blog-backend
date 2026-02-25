@@ -14,11 +14,14 @@ public class JwtService {
     @Value("${app.jwt.secret}")
     private String SECRET;
 
+    @Value("${app.jwt.expiration}")
+    private long expiration;
+
     public String generateToken(UserDetails user) {
         return Jwts.builder()
                 .subject(user.getUsername())
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+                .expiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(Keys.hmacShaKeyFor(SECRET.getBytes()))
                 .compact();
     }
