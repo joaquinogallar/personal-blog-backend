@@ -27,7 +27,7 @@ public class TagController {
         return ResponseEntity.ok(tagService.getAllTags(pageable));
     }
 
-    @GetMapping("/{tagName}")
+    @GetMapping("/name/{tagName}")
     public ResponseEntity<TagResponse> getTagByName(@PathVariable String tagName) {
         return ResponseEntity.ok(tagService.getTagByName(tagName));
     }
