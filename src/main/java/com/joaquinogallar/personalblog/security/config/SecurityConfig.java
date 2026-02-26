@@ -41,25 +41,30 @@ public class SecurityConfig {
                         session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests((req) -> req
-                        // public
+                        // public - no auth required
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/posts/**",
                                 "/api/v1/comments/**",
                                 "/api/v1/tags",
                                 "/api/v1/tags/**").permitAll()
 
-                        // comments without account (anon)
-                        .requestMatchers(HttpMethod.POST,
-                                "/api/v1/comments"
-                        ).permitAll()
+                        // auth endpoints
+                        .requestMatchers("/api/v1/auth/**").permitAll()
 
-                        // auth
-                        .requestMatchers("/api/v1/auth/**")
-                        .permitAll()
+                        // anon comments
+                        .requestMatchers(HttpMethod.POST, "/api/v1/comments").permitAll()
 
-                        // admin
-                        .requestMatchers("/api/v1/admin/**")
-                        .hasRole("ADMIN")
+                        // admin only
+                        .requestMatchers(HttpMethod.GET, "/api/v1/users/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/posts", "/api/v1/posts/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/posts", "/api/v1/posts/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/posts", "/api/v1/posts/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/api/v1/tags", "/api/v1/tags/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/api/v1/tags", "/api/v1/tags/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PATCH, "/api/v1/tags", "/api/v1/tags/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/posts", "/api/v1/posts/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/api/v1/tags", "/api/v1/tags/**").hasRole("ADMIN")
+
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
