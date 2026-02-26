@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -32,9 +34,10 @@ public class PostController {
 
     @PostMapping
     public ResponseEntity<PostResponse> createPost(@RequestBody CreatePostRequest postReq) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(postService.createPost(postReq, "testUser")); // hadrcoded username for testing
+                .body(postService.createPost(postReq, auth.getName()));
     }
 
     @PutMapping("/{idPost}")
