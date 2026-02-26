@@ -37,7 +37,7 @@ public class PostController {
                 .body(postService.createPost(postReq, "testUser")); // hadrcoded username for testing
     }
 
-    @PostMapping("/{idPost}")
+    @PutMapping("/{idPost}")
     public ResponseEntity<PostResponse> updatePost(@PathVariable Long idPost, @RequestBody CreatePostRequest postReq) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -47,7 +47,7 @@ public class PostController {
     @DeleteMapping("/{idPost}")
     public ResponseEntity<PostResponse> deletePost(@PathVariable Long idPost) {
         return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
+                .status(204)
                 .body(postService.deletePost(idPost));
     }
 }

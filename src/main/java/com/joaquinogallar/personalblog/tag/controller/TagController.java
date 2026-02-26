@@ -44,7 +44,7 @@ public class TagController {
                 .body(tagService.createTag(tagReq));
     }
 
-    @PostMapping("/{tagId}")
+    @PutMapping("/{tagId}")
     public ResponseEntity<TagResponse> updateTag(@PathVariable Long tagId, @RequestBody CreateTagRequest tagReq) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -54,7 +54,7 @@ public class TagController {
     @DeleteMapping("/{tagId}")
     public ResponseEntity<TagResponse> deleteTag(@PathVariable Long tagId) {
         return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
+                .status(204)
                 .body(tagService.deleteTag(tagId));
     }
 

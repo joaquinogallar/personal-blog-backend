@@ -52,7 +52,7 @@ public class UserController {
                 .body(userEntityService.createUser(user));
     }
 
-    @PostMapping("/{userId}")
+    @PutMapping("/{userId}")
     public ResponseEntity<String> updateUser(@PathVariable UUID userId, @RequestBody UserRequest user) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -62,7 +62,7 @@ public class UserController {
     @DeleteMapping("/{userId}")
      public ResponseEntity<String> deleteUser(@PathVariable UUID userId) {
         return ResponseEntity
-                .status(HttpStatus.NOT_FOUND)
+                .status(204)
                 .body(userEntityService.deleteUser(userId));
      }
 }
