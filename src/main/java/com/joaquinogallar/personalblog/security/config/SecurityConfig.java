@@ -48,6 +48,12 @@ public class SecurityConfig {
                                 "/api/v1/tags",
                                 "/api/v1/tags/**").permitAll()
 
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/swagger-ui.html",
+                                "/v3/api-docs/**"
+                        ).permitAll()
+
                         // auth endpoints
                         .requestMatchers("/api/v1/auth/**").permitAll()
 
