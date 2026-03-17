@@ -96,7 +96,8 @@ class PostServiceTest {
                 LocalDateTime.now(),
                 false,
                 author.getId(),
-                Set.of()
+                Set.of(),
+                1
         );
 
         createPostRequest = new CreatePostRequest(
@@ -262,7 +263,7 @@ class PostServiceTest {
             );
             PostResponse updatedResponse = new PostResponse(
                     1L, "Updated title", "Updated content", "updated-slug",
-                    LocalDateTime.now(), LocalDateTime.now(), false, author.getId(), Set.of()
+                    LocalDateTime.now(), LocalDateTime.now(), false, author.getId(), Set.of(), 1
             );
 
             given(postRepository.findById(1L)).willReturn(Optional.of(post));

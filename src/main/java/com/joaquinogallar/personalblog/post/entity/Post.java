@@ -39,7 +39,7 @@ public class Post {
     @UpdateTimestamp
     private LocalDateTime updatedAt;
 
-    private Boolean published;
+    private Boolean published = false;
 
     @ManyToOne
     @JoinColumn(name = "author_id")
@@ -55,4 +55,15 @@ public class Post {
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL)
     private List<Comment> comments;
+
+    public int getReadTimeInMinutes() {
+        int wordsPerMinute = 200;
+
+        if (this.content == null || this.content.isBlank()) {
+            return -1;
+        }
+
+        int wordCount = this.content.trim().split("\\s+").length;
+        return Math.max(1, wordCount / wordsPerMinute);
+    }
 }

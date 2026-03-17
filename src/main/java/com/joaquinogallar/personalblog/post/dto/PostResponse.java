@@ -15,6 +15,7 @@ public record PostResponse(
         LocalDateTime updatedAt,
         Boolean published,
         UUID userId,
-        Set<TagResponse> tags
+        Set<TagResponse> tags,
+        int readTImeInMinutes
 ) {
 }
