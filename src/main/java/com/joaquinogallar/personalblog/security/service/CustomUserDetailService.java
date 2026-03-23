@@ -1,5 +1,6 @@
 package com.joaquinogallar.personalblog.security.service;
 
+import com.joaquinogallar.personalblog.security.entity.CustomUserDetails;
 import com.joaquinogallar.personalblog.user.entity.User;
 import com.joaquinogallar.personalblog.user.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -25,16 +26,6 @@ public class CustomUserDetailService implements UserDetailsService {
                         new UsernameNotFoundException("User not found")
                 );
 
-        return org.springframework.security.core.userdetails.User.builder()
-                .username(user.getUsername())
-                .password(user.getPasswordHash())
-                .roles(
-                        user.getRoles()
-                                .stream()
-                                .map(Enum::name)
-                                .toArray(String[]::new)
-                )
-                .disabled(!user.getIsActive())
-                .build();
+        return new CustomUserDetails(user);
     }
 }

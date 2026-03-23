@@ -13,9 +13,6 @@ public record CreateCommentRequest(
         @Size(min = 10, max = 2000)
         String content,
 
-        @Size(max = 100)
-        String authorName,
-
         @Email(message = "Invalid email format")
         String authorEmail
 ) {}

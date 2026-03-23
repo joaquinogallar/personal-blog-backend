@@ -15,6 +15,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -93,11 +95,15 @@ public class PostService implements IPostService {
     public PostResponse updatePost(Long idPost, CreatePostRequest postReq) {
         Post post = postRepository.findById(idPost).orElseThrow(() -> new PostNotFoundException("Post " + idPost + " not found"));
 
+        List<Tag> tags = new ArrayList<>();
+        tags = tagRepository.findAllById(postReq.tagIds());
+
         checkTitleAndSlugAvailability(postReq, idPost);
 
         post.setTitle(postReq.title());
         post.setContent(postReq.content());
         post.setSlug(postReq.slug());
+        post.getTags().addAll(tags);
 
         return postMapper.mapPostToDto(postRepository.save(post));
     }

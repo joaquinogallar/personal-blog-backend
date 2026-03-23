@@ -6,11 +6,13 @@ import com.joaquinogallar.personalblog.comment.mapper.CommentMapper;
 import com.joaquinogallar.personalblog.comment.repository.CommentRepository;
 import com.joaquinogallar.personalblog.comment.exception.CommentNotFoundException;
 import com.joaquinogallar.personalblog.post.exception.PostNotFoundException;
+import com.joaquinogallar.personalblog.security.entity.CustomUserDetails;
 import com.joaquinogallar.personalblog.user.exception.UserNotFoundException;
 import com.joaquinogallar.personalblog.post.entity.Post;
 import com.joaquinogallar.personalblog.post.repository.PostRepository;
 import com.joaquinogallar.personalblog.user.entity.User;
 import com.joaquinogallar.personalblog.user.repository.UserRepository;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -33,15 +35,12 @@ public class CommentService implements ICommentService {
 
     @Override
     @Transactional
-    public String comment(CreateCommentRequest commentReq, Long postId, UUID userId) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User " + userId + " not found"));
+    public String comment(CreateCommentRequest commentReq, Long postId, CustomUserDetails userDetails) {
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException("Post " + postId + " not found"));
 
         Comment comment = Comment.builder()
                 .content(commentReq.content())
-                .user(user)
-                .authorEmail(user != null ? user.getEmail() : commentReq.authorEmail())
-                .authorName(user != null ? user.getUsername() : commentReq.authorName())
+                .authorEmail(userDetails.getEmail())
                 .build();
 
         post.getComments().add(comment);

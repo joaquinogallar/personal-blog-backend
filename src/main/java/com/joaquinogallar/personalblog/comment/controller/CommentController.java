@@ -2,7 +2,10 @@ package com.joaquinogallar.personalblog.comment.controller;
 
 import com.joaquinogallar.personalblog.comment.dto.CreateCommentRequest;
 import com.joaquinogallar.personalblog.comment.service.ICommentService;
+import com.joaquinogallar.personalblog.security.entity.CustomUserDetails;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -17,13 +20,18 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    @PostMapping("/{postId}/{userId}")
+    @PostMapping("/{postId}")
     public ResponseEntity<String> comment(@PathVariable Long postId,
-                                          @PathVariable UUID userId,
-                                          @RequestBody CreateCommentRequest commentReq) {
+                                          @RequestBody CreateCommentRequest commentReq,
+                                          @AuthenticationPrincipal CustomUserDetails userDetails) {
+        if(userDetails == null) {
+            if(commentReq.authorEmail() == null || commentReq.authorEmail().isBlank()) {
+                return ResponseEntity.badRequest().body("The email is required if you're not logged in.");
+            }
+        }
         return ResponseEntity
                 .status(201)
-                .body(commentService.comment(commentReq, postId, userId));
+                .body(commentService.comment(commentReq, postId, userDetails));
     }
 
     @DeleteMapping("/{commentId}")
