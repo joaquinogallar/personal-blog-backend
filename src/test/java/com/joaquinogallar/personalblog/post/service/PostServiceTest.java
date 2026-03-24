@@ -97,7 +97,8 @@ class PostServiceTest {
                 false,
                 author.getId(),
                 Set.of(),
-                1
+                1,
+                false
         );
 
         createPostRequest = new CreatePostRequest(
@@ -130,7 +131,7 @@ class PostServiceTest {
             Page<PostResponse> result = postService.getAllPosts(pageable);
 
             assertThat(result.getTotalElements()).isEqualTo(1);
-            assertThat(result.getContent().get(0).title()).isEqualTo("My first post");
+            assertThat(result.getContent().get(0).getTitle()).isEqualTo("My first post");
         }
     }
 
@@ -147,7 +148,7 @@ class PostServiceTest {
             PostResponse result = postService.getPostByTitle("My first post");
 
             assertThat(result).isNotNull();
-            assertThat(result.title()).isEqualTo("My first post");
+            assertThat(result.getTitle()).isEqualTo("My first post");
         }
 
         @Test
@@ -183,7 +184,7 @@ class PostServiceTest {
 
             verify(postRepository).save(any(Post.class));
             assertThat(result).isNotNull();
-            assertThat(result.title()).isEqualTo("My first post");
+            assertThat(result.getTitle()).isEqualTo("My first post");
         }
 
         @Test
@@ -263,7 +264,7 @@ class PostServiceTest {
             );
             PostResponse updatedResponse = new PostResponse(
                     1L, "Updated title", "Updated content", "updated-slug",
-                    LocalDateTime.now(), LocalDateTime.now(), false, author.getId(), Set.of(), 1
+                    LocalDateTime.now(), LocalDateTime.now(), false, author.getId(), Set.of(), 1, true
             );
 
             given(postRepository.findById(1L)).willReturn(Optional.of(post));
@@ -275,7 +276,7 @@ class PostServiceTest {
             PostResponse result = postService.updatePost(1L, updateRequest);
 
             verify(postRepository).save(post);
-            assertThat(result.title()).isEqualTo("Updated title");
+            assertThat(result.getTitle()).isEqualTo("Updated title");
         }
 
         @Test
@@ -352,7 +353,7 @@ class PostServiceTest {
 
             verify(postRepository).delete(post);
             assertThat(result).isNotNull();
-            assertThat(result.id()).isEqualTo(1L);
+            assertThat(result.getId()).isEqualTo(1L);
         }
 
         @Test

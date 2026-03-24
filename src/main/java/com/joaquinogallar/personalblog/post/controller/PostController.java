@@ -3,12 +3,14 @@ package com.joaquinogallar.personalblog.post.controller;
 import com.joaquinogallar.personalblog.post.dto.CreatePostRequest;
 import com.joaquinogallar.personalblog.post.dto.PostResponse;
 import com.joaquinogallar.personalblog.post.service.IPostService;
+import com.joaquinogallar.personalblog.security.entity.CustomUserDetails;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,8 +30,11 @@ public class PostController {
     }
 
     @GetMapping("/{postTitle}")
-    public ResponseEntity<PostResponse> getPostByTitle(@PathVariable String postTitle) {
-        return ResponseEntity.ok(postService.getPostByTitle(postTitle));
+    public ResponseEntity<PostResponse> getPostByTitle(@PathVariable String postTitle,
+                                                       @AuthenticationPrincipal CustomUserDetails userDetails) {
+        PostResponse post = postService.getPostByTitle(postTitle);
+        post.setUserAuthenticated(userDetails != null);
+        return ResponseEntity.ok(post);
     }
 
     @PostMapping

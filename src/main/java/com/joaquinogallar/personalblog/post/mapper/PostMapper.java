@@ -26,18 +26,18 @@ public class PostMapper {
     public PostResponse mapPostToDto(Post post) {
         if(post == null) return null;
 
-        return new PostResponse(
-                post.getId(),
-                post.getTitle(),
-                post.getContent(),
-                post.getSlug(),
-                post.getCreatedAt(),
-                post.getUpdatedAt(),
-                post.getPublished(),
-                post.getAuthor().getId(),
-                new HashSet<>(tagMapper.mapToTagsDto(new ArrayList<>(post.getTags()))),
-                post.getReadTimeInMinutes()
-        );
+        return PostResponse.builder()
+                .id(post.getId())
+                .title(post.getTitle())
+                .content(post.getContent())
+                .slug(post.getSlug())
+                .createdAt(post.getCreatedAt())
+                .updatedAt(post.getUpdatedAt())
+                .published(post.getPublished())
+                .userId(post.getAuthor().getId())
+                .tags(new HashSet<>(tagMapper.mapToTagsDto(new ArrayList<>(post.getTags()))))
+                .readTimeInMinutes(post.getReadTimeInMinutes())
+                .build();
     }
 
     public List<PostResponse> mapPostsToDto(List<Post> posts) {

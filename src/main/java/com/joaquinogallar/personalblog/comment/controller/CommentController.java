@@ -20,7 +20,7 @@ public class CommentController {
         this.commentService = commentService;
     }
 
-    @PostMapping("/{postId}")
+    @PostMapping("/{postId}/comment")
     public ResponseEntity<String> comment(@PathVariable Long postId,
                                           @RequestBody CreateCommentRequest commentReq,
                                           @AuthenticationPrincipal CustomUserDetails userDetails) {
