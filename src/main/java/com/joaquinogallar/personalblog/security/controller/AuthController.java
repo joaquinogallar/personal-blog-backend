@@ -1,5 +1,6 @@
 package com.joaquinogallar.personalblog.security.controller;
 
+import com.joaquinogallar.personalblog.security.dto.AuthResponse;
 import com.joaquinogallar.personalblog.security.service.JwtService;
 import com.joaquinogallar.personalblog.user.dto.LoginRequest;
 import com.joaquinogallar.personalblog.user.dto.UserRequest;
@@ -40,7 +41,7 @@ public class AuthController {
     }
 
     @PostMapping()
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
@@ -52,10 +53,11 @@ public class AuthController {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         String token = jwtService.generateToken(userDetails);
+        String refreshToken = jwtService.generateRefreshToken(userDetails);
 
-        return ResponseEntity.ok(Map.of(
-                "token", token
-        ));
+        AuthResponse res = new AuthResponse(token, refreshToken);
+
+        return ResponseEntity.ok(res);
     }
 
     @PostMapping("/register")
