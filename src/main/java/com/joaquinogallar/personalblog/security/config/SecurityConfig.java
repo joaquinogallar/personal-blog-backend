@@ -65,7 +65,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.GET, "/api/v1/users/**").hasRole("ADMIN")
 
                         // anon comments
-                        .requestMatchers(HttpMethod.POST, "/api/v1/comments").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/v1/comments/**").permitAll()
 
                         // admin only
                         .requestMatchers(HttpMethod.POST, "/api/v1/posts", "/api/v1/posts/**").hasRole("ADMIN")

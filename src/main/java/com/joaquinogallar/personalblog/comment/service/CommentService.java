@@ -36,11 +36,14 @@ public class CommentService implements ICommentService {
     @Override
     @Transactional
     public String comment(CreateCommentRequest commentReq, Long postId, CustomUserDetails userDetails) {
+        if(userDetails == null)
+            if(userRepository.existsByEmail(commentReq.authorEmail())) throw new IllegalArgumentException("The email is already in use");
+
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException("Post " + postId + " not found"));
 
         Comment comment = Comment.builder()
                 .content(commentReq.content())
-                .authorEmail(userDetails.getEmail())
+                .authorEmail(userDetails != null ? userDetails.getEmail() : commentReq.authorEmail())
                 .build();
 
         post.getComments().add(comment);
