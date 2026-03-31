@@ -87,7 +87,7 @@ class CommentServiceTest {
 
         // NOTE: authorName and authorEmail are set from the User entity when userId is provided.
         // These fields in the request are only used for anonymous comments (future feature).
-        createCommentRequest = new CreateCommentRequest(1L, "Great post!", null, null);
+        createCommentRequest = new CreateCommentRequest("Great post!", null);
     }
 
     // -------------------------------------------------------------------------
@@ -104,7 +104,7 @@ class CommentServiceTest {
             given(userRepository.findById(userId)).willReturn(Optional.of(user));
             given(postRepository.findById(1L)).willReturn(Optional.of(post));
 
-            String result = commentService.comment(createCommentRequest, 1L, userId);
+            String result = commentService.comment(createCommentRequest, 1L, null);
 
             verify(postRepository).save(post);
             assertThat(result).isEqualTo("Comment sent");
@@ -116,7 +116,7 @@ class CommentServiceTest {
             given(userRepository.findById(userId)).willReturn(Optional.of(user));
             given(postRepository.findById(1L)).willReturn(Optional.of(post));
 
-            commentService.comment(createCommentRequest, 1L, userId);
+            commentService.comment(createCommentRequest, 1L, null);
 
             assertThat(post.getComments()).hasSize(1);
             assertThat(post.getComments().get(0).getContent()).isEqualTo("Great post!");
@@ -128,7 +128,7 @@ class CommentServiceTest {
             given(userRepository.findById(userId)).willReturn(Optional.of(user));
             given(postRepository.findById(1L)).willReturn(Optional.of(post));
 
-            commentService.comment(createCommentRequest, 1L, userId);
+            commentService.comment(createCommentRequest, 1L, null);
 
             Comment saved = post.getComments().get(0);
             assertThat(saved.getAuthorName()).isEqualTo("joaquin");
@@ -141,7 +141,7 @@ class CommentServiceTest {
             UUID unknownId = UUID.randomUUID();
             given(userRepository.findById(unknownId)).willReturn(Optional.empty());
 
-            assertThatThrownBy(() -> commentService.comment(createCommentRequest, 1L, unknownId))
+            assertThatThrownBy(() -> commentService.comment(createCommentRequest, 1L, null))
                     .isInstanceOf(UserNotFoundException.class)
                     .hasMessageContaining(unknownId.toString());
 
@@ -154,7 +154,7 @@ class CommentServiceTest {
             given(userRepository.findById(userId)).willReturn(Optional.of(user));
             given(postRepository.findById(99L)).willReturn(Optional.empty());
 
-            assertThatThrownBy(() -> commentService.comment(createCommentRequest, 99L, userId))
+            assertThatThrownBy(() -> commentService.comment(createCommentRequest, 99L, null))
                     .isInstanceOf(PostNotFoundException.class)
                     .hasMessageContaining("99");
 
