@@ -39,7 +39,7 @@ public class GlobalExceptionHandler {
             Exception ex, HttpServletRequest req) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(ApiError.of(HttpStatus.INTERNAL_SERVER_ERROR,
-                        "Error interno del servidor", req.getRequestURI()));
+                        "Internal server error", req.getRequestURI()));
     }
 
     public static class ResourceNotFoundException extends RuntimeException {
