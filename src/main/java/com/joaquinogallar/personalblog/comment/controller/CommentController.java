@@ -4,6 +4,9 @@ import com.joaquinogallar.personalblog.comment.dto.CommentResponse;
 import com.joaquinogallar.personalblog.comment.dto.CreateCommentRequest;
 import com.joaquinogallar.personalblog.comment.service.ICommentService;
 import com.joaquinogallar.personalblog.security.entity.CustomUserDetails;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,8 +26,8 @@ public class CommentController {
     }
 
     @GetMapping("/{postId}")
-    public ResponseEntity<List<CommentResponse>> getAllCommentsInPost(@PathVariable Long postId) {
-        return ResponseEntity.ok(commentService.getAllCommentsInPost(postId));
+    public ResponseEntity<Page<CommentResponse>> getAllCommentsInPost(@PathVariable Long postId, @PageableDefault(size = 10) Pageable pageable) {
+        return ResponseEntity.ok(commentService.getAllCommentsInPost(postId, pageable));
     }
 
     @PostMapping("/{postId}/comment")

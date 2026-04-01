@@ -11,14 +11,13 @@ import com.joaquinogallar.personalblog.security.entity.CustomUserDetails;
 import com.joaquinogallar.personalblog.user.exception.UserNotFoundException;
 import com.joaquinogallar.personalblog.post.entity.Post;
 import com.joaquinogallar.personalblog.post.repository.PostRepository;
-import com.joaquinogallar.personalblog.user.entity.User;
 import com.joaquinogallar.personalblog.user.repository.UserRepository;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class CommentService implements ICommentService {
@@ -37,8 +36,8 @@ public class CommentService implements ICommentService {
 
     @Override
     @Transactional(readOnly = true) // because @Lob annotation in content field
-    public List<CommentResponse> getAllCommentsInPost(Long postId) {
-        return commentRepository.findAllByPostId(postId);
+    public Page<CommentResponse> getAllCommentsInPost(Long postId, Pageable pageable) {
+        return commentRepository.findAllByPostId(postId, pageable);
     }
 
     @Override
