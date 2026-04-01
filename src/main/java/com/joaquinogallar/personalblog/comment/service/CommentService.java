@@ -36,8 +36,9 @@ public class CommentService implements ICommentService {
     }
 
     @Override
+    @Transactional(readOnly = true) // because @Lob annotation in content field
     public List<CommentResponse> getAllCommentsInPost(Long postId) {
-        return List.of();
+        return commentRepository.findAllByPostId(postId);
     }
 
     @Override
@@ -48,9 +49,22 @@ public class CommentService implements ICommentService {
 
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException("Post " + postId + " not found"));
 
+        boolean isLoggedIn = userDetails != null;
+
         Comment comment = Comment.builder()
                 .content(commentReq.content())
-                .authorEmail(userDetails != null ? userDetails.getEmail() : commentReq.authorEmail())
+                .authorEmail(isLoggedIn
+                        ? userDetails.getEmail()
+                        : commentReq.authorEmail())
+                .post(post)
+                .authorName(isLoggedIn
+                        ? userDetails.getUsername()
+                        : null)
+                .user(isLoggedIn
+                        ? userRepository.findUserByEmail(userDetails.getEmail()).orElseThrow(() -> {
+                    throw new UserNotFoundException("User not found");
+                })
+                        : null)
                 .build();
 
         post.getComments().add(comment);
