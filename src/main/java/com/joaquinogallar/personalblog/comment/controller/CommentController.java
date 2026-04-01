@@ -1,5 +1,6 @@
 package com.joaquinogallar.personalblog.comment.controller;
 
+import com.joaquinogallar.personalblog.comment.dto.CommentResponse;
 import com.joaquinogallar.personalblog.comment.dto.CreateCommentRequest;
 import com.joaquinogallar.personalblog.comment.service.ICommentService;
 import com.joaquinogallar.personalblog.security.entity.CustomUserDetails;
@@ -8,6 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.UUID;
 
 @RestController
@@ -18,6 +20,11 @@ public class CommentController {
 
     public CommentController(ICommentService commentService) {
         this.commentService = commentService;
+    }
+
+    @GetMapping("/{postId}")
+    public ResponseEntity<List<CommentResponse>> getAllCommentsInPost(@PathVariable Long postId) {
+        return ResponseEntity.ok(commentService.getAllCommentsInPost(postId));
     }
 
     @PostMapping("/{postId}/comment")

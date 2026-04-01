@@ -1,5 +1,6 @@
 package com.joaquinogallar.personalblog.comment.service;
 
+import com.joaquinogallar.personalblog.comment.dto.CommentResponse;
 import com.joaquinogallar.personalblog.comment.dto.CreateCommentRequest;
 import com.joaquinogallar.personalblog.comment.entity.Comment;
 import com.joaquinogallar.personalblog.comment.mapper.CommentMapper;
@@ -16,6 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -31,6 +33,11 @@ public class CommentService implements ICommentService {
         this.postRepository = postRepository;
         this.userRepository = userRepository;
         this.commentMapper = commentMapper;
+    }
+
+    @Override
+    public List<CommentResponse> getAllCommentsInPost(Long postId) {
+        return List.of();
     }
 
     @Override
