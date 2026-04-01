@@ -10,6 +10,7 @@ import java.util.List;
 public interface IPostService {
     Page<PostResponse> getAllPosts(Pageable pageable);
     PostResponse getPostByTitle(String title);
+    PostResponse getPostBySlug(String slug);
     PostResponse createPost(CreatePostRequest postResponse, String username);
     PostResponse updatePost(Long idPost, CreatePostRequest postResponse);
     PostResponse deletePost(Long idPost);

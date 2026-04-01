@@ -61,6 +61,12 @@ public class PostService implements IPostService {
 
     @Override
     @Transactional(readOnly = true) // because @Lob annotation in content field
+    public PostResponse getPostBySlug(String slug) {
+        return postMapper.mapPostToDto(postRepository.findBySlug(slug).orElseThrow(() -> new PostNotFoundException("Error: post '%s' doesn't exist".formatted(slug))));
+    }
+
+    @Override
+    @Transactional(readOnly = true) // because @Lob annotation in content field
     public PostResponse getPostByTitle(String title) {
         return postMapper.mapPostToDto(postRepository.findByTitle(title).orElseThrow(() -> new PostNotFoundException("Error: post '%s' doesn't exist".formatted(title))));
     }

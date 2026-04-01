@@ -29,6 +29,14 @@ public class PostController {
         return ResponseEntity.ok(postService.getAllPosts(pageable));
     }
 
+    @GetMapping("/slug/{slug}")
+    public ResponseEntity<PostResponse> getPostBySlug(@PathVariable String slug,
+                                                       @AuthenticationPrincipal CustomUserDetails userDetails) {
+        PostResponse post = postService.getPostBySlug(slug);
+        post.setUserAuthenticated(userDetails != null);
+        return ResponseEntity.ok(post);
+    }
+
     @GetMapping("/{postTitle}")
     public ResponseEntity<PostResponse> getPostByTitle(@PathVariable String postTitle,
                                                        @AuthenticationPrincipal CustomUserDetails userDetails) {
