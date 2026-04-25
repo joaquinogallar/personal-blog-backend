@@ -1,6 +1,7 @@
 package com.joaquinogallar.personalblog.security.controller;
 
 import com.joaquinogallar.personalblog.security.dto.AuthResponse;
+import com.joaquinogallar.personalblog.security.dto.RefreshRequest;
 import com.joaquinogallar.personalblog.security.service.AuthService;
 import com.joaquinogallar.personalblog.security.service.JwtService;
 import com.joaquinogallar.personalblog.user.dto.LoginRequest;
@@ -64,4 +65,14 @@ public class AuthController {
         return ResponseEntity.ok(authService.me(user));
     }
 
+    @PostMapping("/refresh")
+    public ResponseEntity<AuthResponse> refresh(@RequestBody RefreshRequest refreshRequest) {
+        return ResponseEntity.ok(authService.refresh(refreshRequest));
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@RequestBody RefreshRequest request) {
+        authService.logout(request);
+        return ResponseEntity.noContent().build();
+    }
 }

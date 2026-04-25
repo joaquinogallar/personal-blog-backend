@@ -1,8 +1,9 @@
 package com.joaquinogallar.personalblog.security.service;
 
 import com.joaquinogallar.personalblog.security.dto.AuthResponse;
+import com.joaquinogallar.personalblog.security.dto.RefreshRequest;
+import com.joaquinogallar.personalblog.security.entity.CustomUserDetails;
 import com.joaquinogallar.personalblog.security.entity.RefreshToken;
-import com.joaquinogallar.personalblog.user.dto.LoginRequest;
 import com.joaquinogallar.personalblog.user.dto.UserRequest;
 import com.joaquinogallar.personalblog.user.dto.UserResponse;
 import com.joaquinogallar.personalblog.user.entity.Role;
@@ -10,17 +11,11 @@ import com.joaquinogallar.personalblog.user.entity.User;
 import com.joaquinogallar.personalblog.user.mapper.UserMapper;
 import com.joaquinogallar.personalblog.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+
 
 import java.util.Set;
 
@@ -35,9 +30,8 @@ public class AuthService {
     private final RefreshTokenService refreshTokenService;
 
     public AuthResponse login(UserDetails userDetails) {
-        User user = userRepository.findUserByUsername(userDetails.getUsername())
-                .orElse(userRepository.findUserByEmail(userDetails.getUsername())
-                        .orElseThrow(() -> new RuntimeException("User not found")));
+        User user = userRepository.findUserByUsername(userDetails.getUsername()) // todo: somehow users can log in with email, that's the correct behavior but it's doesn't make sense since the method it's `findUserByUsername`
+                        .orElseThrow(() -> new RuntimeException("User not found"));
 
         String token = jwtService.generateToken(userDetails);
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
@@ -68,6 +62,27 @@ public class AuthService {
 
     public UserResponse me(User user) {
         return userMapper.mapUserToDto(user);
+    }
+
+    public AuthResponse refresh(RefreshRequest refreshRequest) {
+        RefreshToken refreshToken = refreshTokenService.validateRefreshToken(refreshRequest.getRefreshToken());
+
+        User user = refreshToken.getUser();
+
+        String newAccessToken = jwtService.generateToken(new CustomUserDetails(user));
+
+        refreshTokenService.revokeRefreshToken(refreshToken.getToken());
+        RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(user);
+
+        return AuthResponse.builder()
+                .accessToken(newAccessToken)
+                .refreshToken(newRefreshToken.getToken())
+                .build();
+
+    }
+
+    public void logout(RefreshRequest request) {
+        refreshTokenService.revokeRefreshToken(request.getRefreshToken());
     }
 
 }
