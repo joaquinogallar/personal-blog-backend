@@ -30,15 +30,6 @@ public class JwtService {
                 .compact();
     }
 
-    public String generateRefreshToken(UserDetails user) {
-        return Jwts.builder()
-                .subject(user.getUsername())
-                .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + refresh))
-                .signWith(Keys.hmacShaKeyFor(SECRET.getBytes()))
-                .compact();
-    }
-
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
                 .verifyWith(Keys.hmacShaKeyFor(SECRET.getBytes()))

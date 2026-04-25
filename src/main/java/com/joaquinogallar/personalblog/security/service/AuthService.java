@@ -1,6 +1,7 @@
 package com.joaquinogallar.personalblog.security.service;
 
 import com.joaquinogallar.personalblog.security.dto.AuthResponse;
+import com.joaquinogallar.personalblog.security.entity.RefreshToken;
 import com.joaquinogallar.personalblog.user.dto.LoginRequest;
 import com.joaquinogallar.personalblog.user.dto.UserRequest;
 import com.joaquinogallar.personalblog.user.dto.UserResponse;
@@ -31,13 +32,17 @@ public class AuthService {
     private final UserMapper userMapper;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final RefreshTokenService refreshTokenService;
 
     public AuthResponse login(UserDetails userDetails) {
+        User user = userRepository.findUserByUsername(userDetails.getUsername())
+                .orElse(userRepository.findUserByEmail(userDetails.getUsername())
+                        .orElseThrow(() -> new RuntimeException("User not found")));
 
         String token = jwtService.generateToken(userDetails);
-        String refreshToken = jwtService.generateRefreshToken(userDetails);
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
 
-        AuthResponse res = new AuthResponse(token);
+        AuthResponse res = new AuthResponse(token, refreshToken.getToken());
 
         return res;
     }
