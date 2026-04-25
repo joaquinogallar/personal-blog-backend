@@ -12,7 +12,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class RefreshTokenService {
+public class RefreshTokenService implements IRefreshTokenService {
 
     @Value("${app.jwt.refresh-expiration}")
     private long refreshExpiration;
