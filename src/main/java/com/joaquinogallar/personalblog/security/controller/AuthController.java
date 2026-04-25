@@ -48,7 +48,7 @@ public class AuthController {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        return ResponseEntity.ok(authService.login(loginRequest, userDetails));
+        return ResponseEntity.ok(authService.login(userDetails));
     }
 
     @PostMapping("/register")

@@ -32,7 +32,7 @@ public class AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
 
-    public AuthResponse login(@RequestBody LoginRequest loginRequest, UserDetails userDetails) {
+    public AuthResponse login(UserDetails userDetails) {
 
         String token = jwtService.generateToken(userDetails);
         String refreshToken = jwtService.generateRefreshToken(userDetails);
@@ -42,7 +42,7 @@ public class AuthService {
         return res;
     }
 
-    public UserResponse register(@RequestBody UserRequest request) {
+    public UserResponse register(UserRequest request) {
 
         if (userRepository.existsByUsername(request.username())) {
             throw new RuntimeException("Username already exists");
