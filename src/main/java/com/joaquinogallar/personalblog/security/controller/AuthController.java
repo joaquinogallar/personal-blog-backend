@@ -1,6 +1,7 @@
 package com.joaquinogallar.personalblog.security.controller;
 
 import com.joaquinogallar.personalblog.security.dto.AuthResponse;
+import com.joaquinogallar.personalblog.security.service.AuthService;
 import com.joaquinogallar.personalblog.security.service.JwtService;
 import com.joaquinogallar.personalblog.user.dto.LoginRequest;
 import com.joaquinogallar.personalblog.user.dto.UserRequest;
@@ -27,22 +28,17 @@ import java.util.Set;
 @RequestMapping("/api/v1/auth")
 public class AuthController {
     private final AuthenticationManager authenticationManager;
+    private final AuthService authService;
     private final UserRepository userRepository;
-    private final UserMapper userMapper;
-    private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
 
-    public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, UserMapper userMapper, PasswordEncoder passwordEncoder, JwtService jwtService) {
+    public AuthController(AuthenticationManager authenticationManager, AuthService authService, UserRepository userRepository) {
         this.authenticationManager = authenticationManager;
+        this.authService = authService;
         this.userRepository = userRepository;
-        this.userMapper = userMapper;
-        this.passwordEncoder = passwordEncoder;
-        this.jwtService = jwtService;
     }
 
     @PostMapping()
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
-
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.usernameOrEmail(),
@@ -52,32 +48,12 @@ public class AuthController {
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
-        String token = jwtService.generateToken(userDetails);
-        String refreshToken = jwtService.generateRefreshToken(userDetails);
-
-        AuthResponse res = new AuthResponse(token);
-
-        return ResponseEntity.ok(res);
+        return ResponseEntity.ok(authService.login(loginRequest, userDetails));
     }
 
     @PostMapping("/register")
     public ResponseEntity<UserResponse> register(@RequestBody UserRequest request) {
-
-        if (userRepository.existsByUsername(request.username())) {
-            throw new RuntimeException("Username already exists");
-        }
-
-        User user = User.builder()
-                .username(request.username())
-                .email(request.email())
-                .passwordHash(passwordEncoder.encode(request.password()))
-                .isActive(true)
-                .roles(Set.of(Role.USER))
-                .build();
-
-        userRepository.save(user);
-
-        return ResponseEntity.status(HttpStatus.CREATED).body(userMapper.mapUserToDto(user));
+        return ResponseEntity.ok(authService.register(request));
     }
 
     @GetMapping("/me")
@@ -85,7 +61,7 @@ public class AuthController {
         User user = userRepository.findUserByUsername(authentication.getName())
                 .orElseThrow(() -> new RuntimeException("Error"));
 
-        return ResponseEntity.ok(userMapper.mapUserToDto(user));
+        return ResponseEntity.ok(authService.me(user));
     }
 
 }
