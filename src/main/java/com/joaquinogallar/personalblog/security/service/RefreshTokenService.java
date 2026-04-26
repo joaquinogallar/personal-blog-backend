@@ -6,6 +6,7 @@ import com.joaquinogallar.personalblog.user.entity.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Instant;
 import java.util.UUID;
@@ -19,8 +20,9 @@ public class RefreshTokenService implements IRefreshTokenService {
 
     private final RefreshTokenRepository refreshTokenRepository;
 
+    @Transactional
     public RefreshToken createRefreshToken(User user) {
-        // in case that the user has a token
+        // in case that the user already have a token
         refreshTokenRepository.deleteByUser(user);
 
         RefreshToken refreshToken = RefreshToken.builder()
