@@ -4,6 +4,7 @@ import com.joaquinogallar.personalblog.post.dto.CreatePostRequest;
 import com.joaquinogallar.personalblog.post.dto.PostResponse;
 import com.joaquinogallar.personalblog.post.service.IPostService;
 import com.joaquinogallar.personalblog.security.entity.CustomUserDetails;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -46,7 +47,7 @@ public class PostController {
     }
 
     @PostMapping
-    public ResponseEntity<PostResponse> createPost(@RequestBody CreatePostRequest postReq) {
+    public ResponseEntity<PostResponse> createPost(@RequestBody @Valid CreatePostRequest postReq) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -54,7 +55,7 @@ public class PostController {
     }
 
     @PutMapping("/{idPost}")
-    public ResponseEntity<PostResponse> updatePost(@PathVariable Long idPost, @RequestBody CreatePostRequest postReq) {
+    public ResponseEntity<PostResponse> updatePost(@PathVariable Long idPost, @RequestBody @Valid CreatePostRequest postReq) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(postService.updatePost(idPost, postReq));

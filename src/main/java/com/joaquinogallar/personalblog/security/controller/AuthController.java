@@ -11,6 +11,7 @@ import com.joaquinogallar.personalblog.user.entity.Role;
 import com.joaquinogallar.personalblog.user.entity.User;
 import com.joaquinogallar.personalblog.user.mapper.UserMapper;
 import com.joaquinogallar.personalblog.user.repository.UserRepository;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -39,7 +40,7 @@ public class AuthController {
     }
 
     @PostMapping()
-    public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest loginRequest) {
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         loginRequest.usernameOrEmail(),
@@ -53,7 +54,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<UserResponse> register(@RequestBody UserRequest request) {
+    public ResponseEntity<UserResponse> register(@RequestBody @Valid UserRequest request) {
         return ResponseEntity.ok(authService.register(request));
     }
 

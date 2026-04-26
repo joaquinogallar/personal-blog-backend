@@ -4,6 +4,7 @@ import com.joaquinogallar.personalblog.comment.dto.CommentResponse;
 import com.joaquinogallar.personalblog.comment.dto.CreateCommentRequest;
 import com.joaquinogallar.personalblog.comment.service.ICommentService;
 import com.joaquinogallar.personalblog.security.entity.CustomUserDetails;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -32,7 +33,7 @@ public class CommentController {
 
     @PostMapping("/{postId}/comment")
     public ResponseEntity<String> comment(@PathVariable Long postId,
-                                          @RequestBody CreateCommentRequest commentReq,
+                                          @RequestBody @Valid CreateCommentRequest commentReq,
                                           @AuthenticationPrincipal CustomUserDetails userDetails) {
         if(userDetails == null) {
             if(commentReq.authorEmail() == null || commentReq.authorEmail().isBlank()) {

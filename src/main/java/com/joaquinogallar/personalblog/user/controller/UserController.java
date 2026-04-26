@@ -46,14 +46,14 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<String> createUser(@Valid @RequestBody UserRequest user) {
+    public ResponseEntity<String> createUser(@RequestBody @Valid UserRequest user) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(userEntityService.createUser(user));
     }
 
     @PutMapping("/{userId}")
-    public ResponseEntity<String> updateUser(@PathVariable UUID userId, @RequestBody UserRequest user) {
+    public ResponseEntity<String> updateUser(@PathVariable UUID userId, @RequestBody @Valid UserRequest user) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(userEntityService.updateUser(userId, user));

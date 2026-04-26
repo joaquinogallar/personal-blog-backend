@@ -3,6 +3,7 @@ package com.joaquinogallar.personalblog.tag.controller;
 import com.joaquinogallar.personalblog.tag.dto.CreateTagRequest;
 import com.joaquinogallar.personalblog.tag.dto.TagResponse;
 import com.joaquinogallar.personalblog.tag.service.ITagService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -38,14 +39,14 @@ public class TagController {
     }
 
     @PostMapping
-    public ResponseEntity<TagResponse> createTag(@RequestBody CreateTagRequest tagReq) {
+    public ResponseEntity<TagResponse> createTag(@RequestBody @Valid CreateTagRequest tagReq) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(tagService.createTag(tagReq));
     }
 
     @PutMapping("/{tagId}")
-    public ResponseEntity<TagResponse> updateTag(@PathVariable Long tagId, @RequestBody CreateTagRequest tagReq) {
+    public ResponseEntity<TagResponse> updateTag(@PathVariable Long tagId, @RequestBody @Valid CreateTagRequest tagReq) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(tagService.updateTag(tagId, tagReq));

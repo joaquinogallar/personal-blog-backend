@@ -7,6 +7,7 @@ public record LoginRequest(
         @NotBlank
         @NotEmpty(message = "Username or Email cannot be empty.")
         String usernameOrEmail,
+
         @NotBlank
         @NotEmpty(message = "Password cannot be empty.")
         String password
