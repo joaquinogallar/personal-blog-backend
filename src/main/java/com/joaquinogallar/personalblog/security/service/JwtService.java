@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 
 @Component
-public class JwtService {
+public class JwtService implements IJwtService {
 
     @Value("${app.jwt.secret}")
     private String SECRET;
