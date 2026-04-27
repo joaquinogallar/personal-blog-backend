@@ -1,6 +1,5 @@
-package com.joaquinogallar.personalblog.exception.entity;
+package com.joaquinogallar.personalblog.exception.dto;
 
-import org.springframework.cglib.core.Local;
 import org.springframework.http.HttpStatus;
 
 import java.time.LocalDateTime;

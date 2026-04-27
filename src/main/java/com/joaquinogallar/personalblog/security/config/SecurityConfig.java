@@ -79,7 +79,7 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/posts", "/api/v1/posts/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.DELETE, "/api/v1/tags", "/api/v1/tags/**").hasRole("ADMIN")
 
-                        .anyRequest().authenticated()
+                        .anyRequest().hasRole("ADMIN")
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(AbstractHttpConfigurer::disable)

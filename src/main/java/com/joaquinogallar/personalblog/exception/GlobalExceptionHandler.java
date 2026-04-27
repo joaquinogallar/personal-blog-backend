@@ -1,6 +1,6 @@
 package com.joaquinogallar.personalblog.exception;
 
-import com.joaquinogallar.personalblog.exception.entity.ApiError;
+import com.joaquinogallar.personalblog.exception.dto.ApiError;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
