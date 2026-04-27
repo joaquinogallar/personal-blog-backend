@@ -66,12 +66,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         } catch (io.jsonwebtoken.ExpiredJwtException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Token expirado");
+            response.getWriter().write("Expired token");
             return;
 
         } catch (Exception e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-            response.getWriter().write("Token inválido");
+            response.getWriter().write("Invalid token");
             return;
         }
 
