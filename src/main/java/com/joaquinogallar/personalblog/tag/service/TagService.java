@@ -3,6 +3,7 @@ package com.joaquinogallar.personalblog.tag.service;
 import com.joaquinogallar.personalblog.tag.dto.CreateTagRequest;
 import com.joaquinogallar.personalblog.tag.dto.TagResponse;
 import com.joaquinogallar.personalblog.tag.entity.Tag;
+import com.joaquinogallar.personalblog.tag.exception.TagNotFoundException;
 import com.joaquinogallar.personalblog.tag.mapper.TagMapper;
 import com.joaquinogallar.personalblog.tag.repository.TagRepository;
 import jakarta.persistence.EntityNotFoundException;
@@ -32,12 +33,12 @@ public class TagService implements ITagService {
 
     @Override
     public TagResponse getTagByName(String name) {
-        return tagMapper.mapToTagDto(tagRepository.findByName(name).orElseThrow(() -> new EntityNotFoundException("Tag " + name + " not found")));
+        return tagMapper.mapToTagDto(tagRepository.findByName(name).orElseThrow(() -> new TagNotFoundException("Tag " + name + " not found")));
     }
 
     @Override
     public TagResponse getTagById(Long id) {
-        return tagMapper.mapToTagDto(tagRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Tag " + id + " not found")));
+        return tagMapper.mapToTagDto(tagRepository.findById(id).orElseThrow(() -> new TagNotFoundException("Tag " + id + " not found")));
     }
 
     // ------------------------------------------------------------------------------------------------------------------------
@@ -60,7 +61,7 @@ public class TagService implements ITagService {
     @Override
     @Transactional
     public TagResponse updateTag(Long id, CreateTagRequest tagReq) {
-        Tag tag =  tagRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Tag " + id + " not found"));
+        Tag tag =  tagRepository.findById(id).orElseThrow(() -> new TagNotFoundException("Tag " + id + " not found"));
 
         tag.setName(tagReq.name());
         tag.setSlug(tagReq.slug());
@@ -75,7 +76,7 @@ public class TagService implements ITagService {
     @Override
     @Transactional
     public TagResponse deleteTag(Long id) {
-        Tag tag = tagRepository.findById(id).orElseThrow(() -> new EntityNotFoundException("Tag " + id + " not found"));
+        Tag tag = tagRepository.findById(id).orElseThrow(() -> new TagNotFoundException("Tag " + id + " not found"));
 
         tagRepository.delete(tag);
 

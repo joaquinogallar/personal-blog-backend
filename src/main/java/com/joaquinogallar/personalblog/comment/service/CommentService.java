@@ -60,9 +60,7 @@ public class CommentService implements ICommentService {
                         ? userDetails.getUsername()
                         : null)
                 .user(isLoggedIn
-                        ? userRepository.findUserByEmail(userDetails.getEmail()).orElseThrow(() -> {
-                    throw new UserNotFoundException("User not found");
-                })
+                        ? userRepository.findUserByEmail(userDetails.getEmail()).orElseThrow(() -> new UserNotFoundException("User not found"))
                         : null)
                 .build();
 
