@@ -13,7 +13,6 @@ public interface IUserService {
     UserResponse getUserById(UUID id);
     UserResponse getUserByEmail(String email);
     UserResponse getUserByUsername(String username);
-    String createUser(UserRequest userEntity);
     String updateUser(UUID id, UserRequest userEntity);
     String deleteUser(UUID id);
 }
