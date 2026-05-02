@@ -68,24 +68,6 @@ public class UserService implements IUserService {
     }
 
     // ------------------------------------------------------------------------------------------------------------------------
-    // CREATE
-    @Override
-    @Transactional
-    public String createUser(UserRequest userEntity) {
-//        checkUsernameAndEmailAvailability(userEntity);
-//
-//        User newUser = User.builder()
-//                .username(userEntity.username())
-//                .email(userEntity.email())
-//                .passwordHash(userEntity.password()) // this should be hashed when security is implemented
-//                .build();
-//
-//        userRepository.save(newUser);
-
-        return "User created successfully";
-    }
-
-    // ------------------------------------------------------------------------------------------------------------------------
     // UPDATE
     @Override
     @Transactional
