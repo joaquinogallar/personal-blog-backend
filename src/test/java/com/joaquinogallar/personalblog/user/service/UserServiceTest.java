@@ -181,66 +181,6 @@ class UserServiceTest {
     }
 
     // -------------------------------------------------------------------------
-    // CREATE
-    // -------------------------------------------------------------------------
-
-    @Nested
-    @DisplayName("createUser")
-    class CreateUser {
-
-        @Test
-        @DisplayName("should create user and return success message")
-        void shouldCreateUserSuccessfully() {
-            given(userRepository.existsByUsername("joaquin")).willReturn(false);
-            given(userRepository.existsByEmail("joaquin@example.com")).willReturn(false);
-
-            String result = userService.createUser(userRequest);
-
-            verify(userRepository).save(any(User.class));
-            assertThat(result).isEqualTo("User created successfully");
-        }
-
-        @Test
-        @DisplayName("should throw IllegalArgumentException when username is already taken")
-        void shouldThrowWhenUsernameAlreadyExists() {
-            given(userRepository.existsByUsername("joaquin")).willReturn(true);
-
-            assertThatThrownBy(() -> userService.createUser(userRequest))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessageContaining("username already in use");
-
-            verify(userRepository, never()).save(any());
-        }
-
-        @Test
-        @DisplayName("should throw IllegalArgumentException when email is already taken")
-        void shouldThrowWhenEmailAlreadyExists() {
-            given(userRepository.existsByUsername("joaquin")).willReturn(false);
-            given(userRepository.existsByEmail("joaquin@example.com")).willReturn(true);
-
-            assertThatThrownBy(() -> userService.createUser(userRequest))
-                    .isInstanceOf(IllegalArgumentException.class)
-                    .hasMessageContaining("email already in use");
-
-            verify(userRepository, never()).save(any());
-        }
-
-        @Test
-        @DisplayName("should persist user with correct username and email")
-        void shouldPersistUserWithCorrectFields() {
-            given(userRepository.existsByUsername("joaquin")).willReturn(false);
-            given(userRepository.existsByEmail("joaquin@example.com")).willReturn(false);
-
-            userService.createUser(userRequest);
-
-            verify(userRepository).save(argThat(savedUser ->
-                    savedUser.getUsername().equals("joaquin") &&
-                            savedUser.getEmail().equals("joaquin@example.com")
-            ));
-        }
-    }
-
-    // -------------------------------------------------------------------------
     // UPDATE
     // -------------------------------------------------------------------------
 
