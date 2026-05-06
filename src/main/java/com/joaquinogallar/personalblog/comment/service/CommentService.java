@@ -12,12 +12,12 @@ import com.joaquinogallar.personalblog.user.exception.UserNotFoundException;
 import com.joaquinogallar.personalblog.post.entity.Post;
 import com.joaquinogallar.personalblog.post.repository.PostRepository;
 import com.joaquinogallar.personalblog.user.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 public class CommentService implements ICommentService {
@@ -26,6 +26,7 @@ public class CommentService implements ICommentService {
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     private final CommentMapper commentMapper;
+    private final Logger logger = LoggerFactory.getLogger(CommentService.class);
 
     public CommentService(CommentRepository commentRepository, PostRepository postRepository, UserRepository userRepository, CommentMapper commentMapper) {
         this.commentRepository = commentRepository;
@@ -37,14 +38,21 @@ public class CommentService implements ICommentService {
     @Override
     @Transactional(readOnly = true) // because @Lob annotation in content field
     public Page<CommentResponse> getAllCommentsInPost(Long postId, Pageable pageable) {
+        logger.info("Getting all comments from post {}", postId);
         return commentRepository.findAllByPostId(postId, pageable);
     }
 
     @Override
     @Transactional
     public String comment(CreateCommentRequest commentReq, Long postId, CustomUserDetails userDetails) {
-        if(userDetails == null)
-            if(userRepository.existsByEmail(commentReq.authorEmail())) throw new IllegalArgumentException("The email is already in use");
+        if(userDetails == null) {
+            if (userRepository.existsByEmail(commentReq.authorEmail()))
+                throw new IllegalArgumentException("The email is already in use");
+
+            logger.info("anon user under the email {} is trying to comment in post {}", commentReq.authorEmail(), postId);
+        } else
+            logger.info("user {} is trying to comment in post {}", userDetails.getUsername(), postId);
+
 
         Post post = postRepository.findById(postId).orElseThrow(() -> new PostNotFoundException("Post " + postId + " not found"));
 
@@ -68,6 +76,8 @@ public class CommentService implements ICommentService {
 
         postRepository.save(post);
 
+        logger.info("comment sent successfully");
+
         return "Comment sent";
     }
 
@@ -75,7 +85,11 @@ public class CommentService implements ICommentService {
     @Transactional
     public String deleteComment(Long commentId) {
         Comment comment = commentRepository.findById(commentId).orElseThrow(() -> new CommentNotFoundException("Comment " + commentId + " not found"));
+        logger.info("deleting comment {}", commentId);
+
         commentRepository.delete(comment);
+
+        logger.info("comment deleted successfully");
         return "Comment deleted successfully";
     }
 }
