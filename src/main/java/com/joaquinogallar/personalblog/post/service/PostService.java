@@ -10,6 +10,8 @@ import com.joaquinogallar.personalblog.post.repository.PostRepository;
 import com.joaquinogallar.personalblog.tag.entity.Tag;
 import com.joaquinogallar.personalblog.tag.repository.TagRepository;
 import com.joaquinogallar.personalblog.user.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -27,6 +29,7 @@ public class PostService implements IPostService {
     private final TagRepository tagRepository;
     private final PostMapper postMapper;
     private final UserRepository userRepository;
+    private final Logger logger = LoggerFactory.getLogger(PostService.class);
 
     public PostService(PostRepository postRepository, TagRepository tagRepository, PostMapper postMapper, UserRepository userRepository) {
         this.postRepository = postRepository;
@@ -36,7 +39,7 @@ public class PostService implements IPostService {
     }
 
     public void checkTitleAndSlugAvailability(CreatePostRequest postReq) {
-
+        logger.info("checking title '{}' and slug '{}' availability", postReq.title(), postReq.slug());
         if(postRepository.existsByTitle(postReq.title()))
             throw new IllegalArgumentException("Error: the title is already in use");
 
@@ -45,7 +48,7 @@ public class PostService implements IPostService {
     }
 
     public void checkTitleAndSlugAvailability(CreatePostRequest postReq, Long id) {
-
+        logger.info("checking title '{}' and slug '{}' availability for post {}", postReq.title(), postReq.slug(), id);
         if(postRepository.existsByTitleAndIdNot((postReq.title()), id))
             throw new IllegalArgumentException("Error: the title is already in use");
 
@@ -56,18 +59,21 @@ public class PostService implements IPostService {
     // GET
     @Override
     public Page<PostResponse> getAllPosts(Pageable pageable) {
+        logger.info("fetching all posts in page: {}", pageable.getPageNumber());
         return postMapper.mapPostsToDto(postRepository.findAll(pageable));
     }
 
     @Override
     @Transactional(readOnly = true) // because @Lob annotation in content field
     public PostResponse getPostBySlug(String slug) {
+        logger.info("searching post with slug '{}'", slug);
         return postMapper.mapPostToDto(postRepository.findBySlug(slug).orElseThrow(() -> new PostNotFoundException("Error: post '%s' doesn't exist".formatted(slug))));
     }
 
     @Override
     @Transactional(readOnly = true) // because @Lob annotation in content field
     public PostResponse getPostByTitle(String title) {
+        logger.info("searching post with title '{}'", title);
         return postMapper.mapPostToDto(postRepository.findByTitle(title).orElseThrow(() -> new PostNotFoundException("Error: post '%s' doesn't exist".formatted(title))));
     }
 
@@ -92,6 +98,7 @@ public class PostService implements IPostService {
                 .author(userRepository.findUserByUsername(username).orElseThrow(() -> new UserNotFoundException("User not found")))
                 .build();
 
+        logger.info("trying to save a new post");
         return postMapper.mapPostToDto(postRepository.save(post));
     }
 
@@ -112,6 +119,7 @@ public class PostService implements IPostService {
         post.setSlug(postReq.slug());
         post.getTags().addAll(tags);
 
+        logger.info("trying to update post {}", idPost);
         return postMapper.mapPostToDto(postRepository.save(post));
     }
 
@@ -124,6 +132,7 @@ public class PostService implements IPostService {
 
         postRepository.delete(post);
 
+        logger.info("trying to delete post {}", idPost);
         return postMapper.mapPostToDto(post);
     }
 
