@@ -12,6 +12,8 @@ import com.joaquinogallar.personalblog.user.entity.User;
 import com.joaquinogallar.personalblog.user.mapper.UserMapper;
 import com.joaquinogallar.personalblog.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -32,15 +34,18 @@ public class AuthService implements IAuthService {
     private final JwtService jwtService;
     private final RefreshTokenService refreshTokenService;
     private final RefreshTokenRepository refreshTokenRepository;
+    private final Logger logger = LoggerFactory.getLogger(AuthService.class);
 
     @Transactional
     public AuthResponse login(UserDetails userDetails) {
+        logger.info("user trying to log in");
         User user = userRepository.findUserByUsername(userDetails.getUsername()) // todo: somehow users can log in with email, that's the correct behavior but it's doesn't make sense since the method it's `findUserByUsername`
                         .orElseThrow(() -> new RuntimeException("User not found"));
 
         String token = jwtService.generateToken(userDetails);
         RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
 
+        logger.info("user logged in");
         return new AuthResponse(token, refreshToken.getToken());
     }
 
@@ -61,6 +66,8 @@ public class AuthService implements IAuthService {
                 .build();
 
         userRepository.save(user);
+
+        logger.info("user {} registered correctly", request.username());
 
         return userMapper.mapUserToDto(user);
     }
